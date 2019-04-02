@@ -11,12 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 public class NewRequestActivity extends AppCompatActivity {
 
@@ -25,6 +27,7 @@ public class NewRequestActivity extends AppCompatActivity {
     private EditText description;
     private Button lost_button;
     private ImageButton backButton;
+    private ScrollView scrollView;
     private boolean switchButton = false;
 
     @Override
@@ -78,6 +81,7 @@ public class NewRequestActivity extends AppCompatActivity {
         lost_button = findViewById(R.id.lost_button);
         publish = findViewById(R.id.publish_button);
         backButton = findViewById(R.id.backButton);
+        scrollView = findViewById(R.id.scrollView);
     }
 
     private void returnToMainActivity() {

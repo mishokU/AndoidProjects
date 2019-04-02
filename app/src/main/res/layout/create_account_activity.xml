@@ -14,6 +14,7 @@
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
         android:background="@null"
         android:ems="10"
         android:hint="@string/human_name"
@@ -27,8 +28,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/photoImageButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.166" />
+        app:layout_constraintTop_toTopOf="@+id/photoImageButton"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/human_surname"
@@ -53,13 +54,15 @@
         android:id="@+id/create"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/rounded_button"
         android:text="@string/create"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/telephone_field"
+        app:layout_constraintVertical_bias="0.616" />
 
     <include
         android:id="@+id/app_bar"
@@ -91,6 +94,7 @@
         android:layout_height="45dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
@@ -102,9 +106,10 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.43" />
+        app:layout_constraintTop_toBottomOf="@+id/photoImageButton"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/telephone_field"
