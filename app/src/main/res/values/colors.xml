@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#F0ECED</color>
+    <color name="colorBackgroundBar">#F0ECED</color>
+    <color name="colorBackgroundButton">#BFCACF</color>
+    <color name="colorBgProfile">#F5F5F5</color>
+    <color name="choiceColor">#B2DEE0</color>
+    <color name="iconColor">#D181C3</color>
+    <color name="black">#000000</color>
+    <color name="bgPassword">#ECD616</color>
+    <color name="bgSignInbutton">#25F1EA</color>
+    <color name="SignInBackground">#E9E5E0</color>
+    <color name="foundColor">#A3E2A1</color>
+    <color name="lostColor">#F0A2AA</color>
+</resources>

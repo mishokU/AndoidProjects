@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">PolyFinder</string>
+    <string name="image_button">ImageButton</string>
+    <string name="account">Account</string>
+    <string name="human_name">Имя</string>
+    <string name="human_surname">Фамилия</string>
+    <string name="save_info_button">Save</string>
+    <string name="course">Курс</string>
+    <string name="direction">Направление</string>
+    <string name="telephone_field">Телефон</string>
+    <string name="group_in_university">Номер Группы</string>
+    <string name="vk_link">Ссылка на Вк</string>
+    <string name="backToMain">back to scroll tabs</string>
+    <string name="setimagefromphone">SetImage</string>
+    <string name="choiceToDo">Нашел | Потерял</string>
+    <string name="publish_button">Publish</string>
+    <string name="description">Описание</string>
+    <string name="communication_method">Способ связи</string>
+    <string name="whereIsFound">Где найдено</string>
+    <string name="title">Заголовок</string>
+    <string name="sign_in">Sign In</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="not_registered">Not Registered?</string>
+    <string name="create_an_account">Create an account</string>
+    <string name="create">create</string>
+    <string name="lost">Lost</string>
+    <string name="found">Found</string>
+</resources>
