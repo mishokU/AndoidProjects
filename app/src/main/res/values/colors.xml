@@ -14,4 +14,5 @@
     <color name="SignInBackground">#E9E5E0</color>
     <color name="foundColor">#A3E2A1</color>
     <color name="lostColor">#F0A2AA</color>
+    <color name="photoBgColor">#E8CDF0</color>
 </resources>

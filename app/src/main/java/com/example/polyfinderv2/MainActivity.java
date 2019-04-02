@@ -2,6 +2,7 @@ package com.example.polyfinderv2;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
@@ -30,13 +32,14 @@ public class MainActivity extends AppCompatActivity {
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
-        goToProfileButton = findViewById(R.id.profile_button);
-        requestButton = findViewById(R.id.request_button);
+        setAllViews();
 
-        scrollView = findViewById(R.id.scrollView);
-        mainTape = scrollView.findViewById(R.id.mainTape);
+        setOnClickListeners();
 
+        addElementToScrollView();
+    }
 
+    private void setOnClickListeners() {
         goToProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,8 +53,15 @@ public class MainActivity extends AppCompatActivity {
                 launch(NewRequestActivity.class);
             }
         });
+    }
 
-        addElementToScrollView();
+    private void setAllViews() {
+        goToProfileButton = findViewById(R.id.profile_button);
+        requestButton = findViewById(R.id.request_button);
+
+        scrollView = findViewById(R.id.scrollView);
+        mainTape = scrollView.findViewById(R.id.mainTape);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -67,21 +77,22 @@ public class MainActivity extends AppCompatActivity {
             boolean color = (boolean)requestBundle.get("color");
 
             View request = getLayoutInflater().inflate(R.layout.request_rectangle, null);
+            ImageView find = request.findViewById(R.id.imageView2);
 
+            //Set background color to new request depend on witch color we get from user
             if(color){
-                request.setBackgroundColor(getColor(R.color.lostColor));
+                find.setColorFilter(getColor(R.color.lostColor));
             } else {
-                request.setBackgroundColor(getColor(R.color.foundColor));
+                find.setColorFilter(getColor(R.color.foundColor));
             }
+
             titleRequest = request.findViewById(R.id.title);
             titleRequest.setLines(1);
             titleRequest.setEnabled(false);
-            titleRequest.setTextColor(Color.WHITE);
 
             descriptionRequest = request.findViewById(R.id.description);
             descriptionRequest.setEnabled(false);
             descriptionRequest.setLines(2);
-            descriptionRequest.setTextColor(Color.WHITE);
 
             titleRequest.setText(title);
             descriptionRequest.setText(description);
