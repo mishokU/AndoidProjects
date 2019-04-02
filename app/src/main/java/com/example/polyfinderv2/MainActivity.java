@@ -1,18 +1,29 @@
 package com.example.polyfinderv2;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.os.IBinder;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.SearchView;
+
+import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,15 +33,16 @@ public class MainActivity extends AppCompatActivity {
     private ScrollView scrollView;
     private EditText titleRequest;
     private EditText descriptionRequest;
+    private ImageButton searchView;
+    private android.support.v7.widget.Toolbar toolbar;
+    private ImageButton backButton;
+    private EditText searchText;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
 
         setAllViews();
 
@@ -53,15 +65,60 @@ public class MainActivity extends AppCompatActivity {
                 launch(NewRequestActivity.class);
             }
         });
+
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openCustomSearchView();
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeCustomSearchView();
+            }
+        });
+    }
+
+    private void closeCustomSearchView() {
+        toolbar.setVisibility(View.VISIBLE);
+        goToProfileButton.setVisibility(View.VISIBLE);
+
+        backButton.setVisibility(View.INVISIBLE);
+        searchText.setVisibility(View.INVISIBLE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            searchView.setBackgroundColor(getColor(R.color.colorPrimary));
+            backButton.setBackgroundColor(getColor(R.color.colorPrimary));
+        }
+        UIUtil.hideKeyboard(this);
+    }
+
+    private void openCustomSearchView() {
+        toolbar.setVisibility(View.INVISIBLE);
+        goToProfileButton.setVisibility(View.INVISIBLE);
+        searchView.setBackgroundColor(Color.WHITE);
+
+        backButton.setVisibility(View.VISIBLE);
+        backButton.setBackgroundColor(Color.WHITE);
+        searchText.setVisibility(View.VISIBLE);
+        UIUtil.showKeyboard(this,searchText);
+        //searchView.setAnimation();
     }
 
     private void setAllViews() {
+        toolbar = findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+
         goToProfileButton = findViewById(R.id.profile_button);
         requestButton = findViewById(R.id.request_button);
+        searchView = findViewById(R.id.searchView);
+        backButton = findViewById(R.id.backButton);
+        searchText = findViewById(R.id.searchText);
 
         scrollView = findViewById(R.id.scrollView);
         mainTape = scrollView.findViewById(R.id.mainTape);
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
