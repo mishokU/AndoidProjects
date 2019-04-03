@@ -6,10 +6,39 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <include
+    <android.support.v7.widget.Toolbar
         android:id="@+id/app_bar"
-        layout="@layout/app_bar">
-    </include>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/CustomActionBarStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <include
+            android:id="@+id/app_name"
+            layout="@layout/app_name">
+        </include>
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.design.widget.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tablayout"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabTextColor="@color/colorAccent"
+        app:tabIndicatorColor="@color/photoBgColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar"
+        app:layout_constraintVertical_bias="0.0"/>
+
 
     <include
         android:id="@+id/profile_button"
@@ -36,13 +65,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:background="@null"
         android:hint="@string/search"
         android:inputType="textPersonName"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView"
+        app:layout_constraintBottom_toBottomOf="@+id/app_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/backButton"
@@ -68,77 +95,92 @@
         app:srcCompat="?attr/homeAsUpIndicator" />
 
     <ImageButton
+        android:id="@+id/searchView"
         android:layout_width="45dp"
         android:layout_height="40dp"
-        android:id="@+id/searchView"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:background="@color/colorPrimary"
         android:src="@android:drawable/ic_menu_search"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView"
+        app:layout_constraintBottom_toBottomOf="@+id/app_bar"
         app:layout_constraintEnd_toEndOf="@+id/app_bar"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/app_bar"
-        app:layout_constraintTop_toTopOf="@+id/app_bar"
-        app:layout_constraintVertical_bias="0.625" />
+        app:layout_constraintTop_toTopOf="@+id/app_bar" />
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/viewPager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar"
+        app:layout_constraintTop_toBottomOf="@+id/tablayout"
         app:layout_constraintVertical_bias="0.0">
 
-        <LinearLayout
-            android:id="@+id/mainTape"
+        <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tablayout"
+            app:layout_constraintVertical_bias="0.0">
 
-            <include
-                android:id="@+id/request_rectangle"
-                layout="@layout/request_rectangle">
+            <LinearLayout
+                android:id="@+id/mainTape"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            </include>
+                <include
+                    android:id="@+id/request_rectangle"
+                    layout="@layout/request_rectangle">
 
-            <include
-                android:id="@+id/request_rectangle"
-                layout="@layout/request_rectangle">
+                </include>
 
-            </include>
+                <include
+                    android:id="@+id/request_rectangle"
+                    layout="@layout/request_rectangle">
 
-            <include
-                android:id="@+id/request_rectangle"
-                layout="@layout/request_rectangle">
+                </include>
 
-            </include>
+                <include
+                    android:id="@+id/request_rectangle"
+                    layout="@layout/request_rectangle">
 
-            <include
-                android:id="@+id/request_rectangle"
-                layout="@layout/request_rectangle">
+                </include>
 
-            </include>
+                <include
+                    android:id="@+id/request_rectangle"
+                    layout="@layout/request_rectangle">
 
-            <include
-                android:id="@+id/request_rectangle"
-                layout="@layout/request_rectangle">
+                </include>
 
-            </include>
+                <include
+                    android:id="@+id/request_rectangle"
+                    layout="@layout/request_rectangle">
 
-            <include
-                android:id="@+id/request_rectangle"
-                layout="@layout/request_rectangle">
+                </include>
 
-            </include>
+                <include
+                    android:id="@+id/request_rectangle"
+                    layout="@layout/request_rectangle">
 
+                </include>
 
-        </LinearLayout>
+                <include
+                    android:id="@+id/request_rectangle"
+                    layout="@layout/request_rectangle">
 
-    </ScrollView>
+                </include>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </android.support.v4.view.ViewPager>
 
     <include
         android:id="@+id/request_button"

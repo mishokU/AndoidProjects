@@ -8,7 +8,9 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
@@ -37,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     private android.support.v7.widget.Toolbar toolbar;
     private ImageButton backButton;
     private EditText searchText;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -47,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         setAllViews();
 
         setOnClickListeners();
+
+        setViewPagerAdapter();
 
         addElementToScrollView();
     }
@@ -107,6 +114,15 @@ public class MainActivity extends AppCompatActivity {
         //searchView.setAnimation();
     }
 
+    private void setViewPagerAdapter(){
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.AddFragment(new FoundFragment(), "Found");
+        adapter.AddFragment(new LostFragment(), "Lost");
+
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
     private void setAllViews() {
         toolbar = findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
@@ -116,6 +132,8 @@ public class MainActivity extends AppCompatActivity {
         searchView = findViewById(R.id.searchView);
         backButton = findViewById(R.id.backButton);
         searchText = findViewById(R.id.searchText);
+        tabLayout = findViewById(R.id.tablayout);
+        viewPager = findViewById(R.id.viewPager);
 
         scrollView = findViewById(R.id.scrollView);
         mainTape = scrollView.findViewById(R.id.mainTape);
@@ -134,14 +152,8 @@ public class MainActivity extends AppCompatActivity {
             boolean color = (boolean)requestBundle.get("color");
 
             View request = getLayoutInflater().inflate(R.layout.request_rectangle, null);
-            ImageView find = request.findViewById(R.id.imageView2);
 
             //Set background color to new request depend on witch color we get from user
-            if(color){
-                find.setColorFilter(getColor(R.color.lostColor));
-            } else {
-                find.setColorFilter(getColor(R.color.foundColor));
-            }
 
             titleRequest = request.findViewById(R.id.title);
             titleRequest.setLines(1);

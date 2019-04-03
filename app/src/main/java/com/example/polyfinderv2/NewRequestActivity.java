@@ -44,7 +44,8 @@ public class NewRequestActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                returnToMainActivityWithData();
+                publishToScrollView(switchButton);
+                returnToMainActivity();
             }
         });
 
@@ -90,14 +91,16 @@ public class NewRequestActivity extends AppCompatActivity {
         finish();
     }
 
-    private void returnToMainActivityWithData() {
-        Intent mainActivity = new Intent(this, MainActivity.class);
+    private void publishToScrollView(boolean fragment) {
 
-        mainActivity.putExtra("title", title.getText().toString());
-        mainActivity.putExtra("description", description.getText().toString());
-        mainActivity.putExtra("color",switchButton);
-
-        startActivity(mainActivity);
-        finish();
+        Intent activity;
+        if(fragment){
+            activity = new Intent(this, LostFragment.class);
+        } else {
+            activity = new Intent(this, FoundFragment.class);
+        }
+        activity.putExtra("title", title.getText().toString());
+        activity.putExtra("description", description.getText().toString());
+        activity.putExtra("color",switchButton);
     }
 }
