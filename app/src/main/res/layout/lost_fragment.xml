@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    android:id="@+id/scrollView"
+    android:id="@+id/lostscrollView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintBottom_toBottomOf="parent"
@@ -14,7 +14,7 @@
     app:layout_constraintVertical_bias="0.0">
 
     <LinearLayout
-        android:id="@+id/mainTape"
+        android:id="@+id/lostmainTape"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">

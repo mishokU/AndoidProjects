@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -44,8 +45,7 @@ public class NewRequestActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                publishToScrollView(switchButton);
-                returnToMainActivity();
+                publishToScrollView();
             }
         });
 
@@ -91,16 +91,15 @@ public class NewRequestActivity extends AppCompatActivity {
         finish();
     }
 
-    private void publishToScrollView(boolean fragment) {
+    private void publishToScrollView() {
+        //Add to data base and publish to main tape
+        Intent intent = new Intent(this, MainActivity.class);
 
-        Intent activity;
-        if(fragment){
-            activity = new Intent(this, LostFragment.class);
-        } else {
-            activity = new Intent(this, FoundFragment.class);
-        }
-        activity.putExtra("title", title.getText().toString());
-        activity.putExtra("description", description.getText().toString());
-        activity.putExtra("color",switchButton);
+        intent.putExtra("title", title.getText().toString());
+        intent.putExtra("description", description.getText().toString());
+        intent.putExtra("fragment", switchButton);
+
+        startActivity(intent);
+        finish();
     }
 }

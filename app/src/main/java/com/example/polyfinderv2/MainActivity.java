@@ -1,49 +1,30 @@
 package com.example.polyfinderv2;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
-import android.os.IBinder;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Layout;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.SearchView;
-
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;
 
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton goToProfileButton;
     private ImageButton requestButton;
-    private LinearLayout mainTape;
-    private ScrollView scrollView;
-    private EditText titleRequest;
-    private EditText descriptionRequest;
     private ImageButton searchView;
     private android.support.v7.widget.Toolbar toolbar;
     private ImageButton backButton;
     private EditText searchText;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private FoundFragment foundFragment;
+    private LostFragment lostFragment;
 
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,8 +97,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void setViewPagerAdapter(){
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.AddFragment(new FoundFragment(), "Found");
-        adapter.AddFragment(new LostFragment(), "Lost");
+
+        foundFragment = new FoundFragment();
+        lostFragment = new LostFragment();
+
+        adapter.AddFragment(foundFragment, "Found");
+        adapter.AddFragment(lostFragment, "Lost");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -134,39 +119,18 @@ public class MainActivity extends AppCompatActivity {
         searchText = findViewById(R.id.searchText);
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewPager);
+        //reloadData = findViewById(R.id.loadData);
 
-        scrollView = findViewById(R.id.scrollView);
-        mainTape = scrollView.findViewById(R.id.mainTape);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void addElementToScrollView() {
-
-        Intent requestTake = getIntent();
-        Bundle requestBundle = requestTake.getExtras();
-
-        if(requestBundle != null) {
-
-            String title = (String)requestBundle.get("title");
-            String description = (String)requestBundle.get("description");
-            boolean color = (boolean)requestBundle.get("color");
-
-            View request = getLayoutInflater().inflate(R.layout.request_rectangle, null);
-
-            //Set background color to new request depend on witch color we get from user
-
-            titleRequest = request.findViewById(R.id.title);
-            titleRequest.setLines(1);
-            titleRequest.setEnabled(false);
-
-            descriptionRequest = request.findViewById(R.id.description);
-            descriptionRequest.setEnabled(false);
-            descriptionRequest.setLines(2);
-
-            titleRequest.setText(title);
-            descriptionRequest.setText(description);
-
-            mainTape.addView(request,0);
+    private void addElementToScrollView(){
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            if(!bundle.getBoolean("fragment")) {
+                foundFragment.setArguments(bundle);
+            } else {
+                lostFragment.setArguments(bundle);
+            }
         }
     }
 

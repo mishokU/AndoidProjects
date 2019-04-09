@@ -10,8 +10,6 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private Button createAcc;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
