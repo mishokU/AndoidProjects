@@ -1,9 +1,7 @@
 package com.example.polyfinderv2;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -15,8 +13,9 @@ public class LogInActivity extends AppCompatActivity {
 
     private EditText email;
     private EditText password;
-    private TextView createAnAccount;
+    private Button createAnAccount;
     private Button signInButton;
+    private Button registerButton;
     private boolean pushButton = false;
 
     @Override
@@ -30,9 +29,9 @@ public class LogInActivity extends AppCompatActivity {
 
     private void findAllViews(){
         email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
-        createAnAccount = findViewById(R.id.createAnAccount);
+        password = findViewById(R.id.password_text);
         signInButton = findViewById(R.id.sign_in_button);
+        registerButton = findViewById(R.id.registered_button);
     }
 
     private void setOnAction(){
@@ -41,16 +40,11 @@ public class LogInActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                if(checkData()){
-                    launchActivity(MainActivity.class);
-                } else {
-                    Toast incorrect = Toast.makeText(getApplicationContext(), "Incorrect data", Toast.LENGTH_LONG);
-                    incorrect.show();
-                }
+                launchActivity(SignInActivity.class);
             }
         });
 
-        createAnAccount.setOnClickListener(new View.OnClickListener(){
+        registerButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
@@ -63,16 +57,6 @@ public class LogInActivity extends AppCompatActivity {
         Intent intent = new Intent(this, activity);
         startActivity(intent);
         finish();
-    }
-
-    private boolean checkData(){
-        //Danila's function
-
-        if(email.getText().toString().equals("admin")
-                && password.getText().toString().equals("admin")){
-
-            return pushButton = true;
-        }
-        return pushButton;
+        overridePendingTransition(0,0);
     }
 }
