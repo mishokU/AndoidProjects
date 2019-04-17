@@ -3,5 +3,6 @@
 
     <style name="CustomTextAlignment" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:textAlignment">center</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
     </style>
 </resources>

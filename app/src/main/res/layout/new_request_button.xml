@@ -4,6 +4,6 @@
     android:layout_width="70dp"
     android:layout_height="70dp"
     android:layout_gravity="end|bottom"
-    android:background="@drawable/rounded_button"
+    android:background="@drawable/create_request_button"
     android:src="@android:drawable/ic_menu_add">
 </ImageButton>
