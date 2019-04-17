@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements
     private ImageButton sortView;
     private FoundFragment foundFragment;
     private LostFragment lostFragment;
+    private ImageButton rubberButton;
     private ArrayList<View> bunchOfViews = new ArrayList<>();
     private int foundScrollDown = 0;
     private int lostScrollDown = 0;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements
         bunchOfViews.add(backButton = findViewById(R.id.backButton));
         bunchOfViews.add(searchText = findViewById(R.id.searchText));
         bunchOfViews.add(sortView = findViewById(R.id.sortButton));
+        bunchOfViews.add(rubberButton = findViewById(R.id.rubberView));
         goToProfileButton = toolbar.findViewById(R.id.profile_button);
         requestButton = findViewById(R.id.request_button);
         tabLayout = findViewById(R.id.tablayout);
@@ -141,18 +143,26 @@ public class MainActivity extends AppCompatActivity implements
 
             }
         });
+        rubberButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                searchText.setText("");
+            }
+        });
     }
 
 
     private void closeCustomSearchView() {
         toolbar.setVisibility(View.VISIBLE);
         goToProfileButton.setVisibility(View.VISIBLE);
-
+        sortView.setVisibility(View.VISIBLE);
+        rubberButton.setVisibility(View.INVISIBLE);
+        searchView.setVisibility(View.VISIBLE);
         backButton.setVisibility(View.INVISIBLE);
         searchText.setVisibility(View.INVISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            //searchView.setBackgroundColor(getColor(R.color.colorPrimary));
             backButton.setBackgroundColor(getColor(R.color.colorPrimary));
         }
         UIUtil.hideKeyboard(this);
@@ -161,8 +171,10 @@ public class MainActivity extends AppCompatActivity implements
     private void openCustomSearchView() {
         toolbar.setVisibility(View.INVISIBLE);
         goToProfileButton.setVisibility(View.INVISIBLE);
-
+        searchView.setVisibility(View.INVISIBLE);
+        rubberButton.setVisibility(View.VISIBLE);
         backButton.setVisibility(View.VISIBLE);
+        sortView.setVisibility(View.INVISIBLE);
         backButton.setBackgroundColor(Color.WHITE);
         searchText.setVisibility(View.VISIBLE);
         UIUtil.showKeyboard(this, searchText);

@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintlayout"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
-    android:background="@color/colorBgProfile">
+    android:layout_height="120dp">
 
     <TextView
         android:id="@+id/category"
