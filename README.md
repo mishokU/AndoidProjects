@@ -62,5 +62,5 @@ Art-director(внешний дизайн приложения, макеты ст
  - оставленные 
  - заявки(non-public)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjAxMzQ3MjIyN119
+eyJoaXN0b3J5IjpbNzczODE3ODAwLDIwMTM0NzIyMjddfQ==
 -->
