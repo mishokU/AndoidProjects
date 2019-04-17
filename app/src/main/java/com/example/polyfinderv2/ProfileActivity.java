@@ -23,6 +23,7 @@ public class ProfileActivity extends AppCompatActivity {
     static final int GALLERY_REQUEST = 1;
 
     private ImageButton backButton;
+    private ImageButton logoutButton;
 
     //Data from views
     private ImageButton setPhoto;
@@ -50,12 +51,10 @@ public class ProfileActivity extends AppCompatActivity {
     private void findAllViews(){
         backButton = findViewById(R.id.backButton);
         setPhoto = findViewById(R.id.photoImageButton);
-        name = findViewById(R.id.human_name);
-        surname = findViewById(R.id.human_surname);
-        direction = findViewById(R.id.direction);
+        name = findViewById(R.id.email_field);
+        surname = findViewById(R.id.password_field);
         telephone = findViewById(R.id.telephone_field);
-        group = findViewById(R.id.group_in_university);
-        vkLink = findViewById(R.id.vk_link);
+        logoutButton = findViewById(R.id.logout_button);
         saveInfoButton = findViewById(R.id.save_info_button);
     }
 
@@ -64,7 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                returnToMainActivity();
+                launchActivity(MainActivity.class);
             }
         });
 
@@ -80,6 +79,13 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveInformationToServer();
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchActivity(LogInActivity.class);
             }
         });
     }
@@ -131,9 +137,14 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void returnToMainActivity() {
-        Intent mainActivity = new Intent(this, MainActivity.class);
-        startActivity(mainActivity);
-        finish();
+    private void launchActivity(Class activity) {
+        if(activity == LogInActivity.class){
+            Intent intent = new Intent(this, activity);
+            startActivity(intent);
+            finish();
+        } else {
+            finish();
+        }
+        overridePendingTransition(0,0);
     }
 }

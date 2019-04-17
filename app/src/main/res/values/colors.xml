@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimary">#2CE45B</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#F0ECED</color>
     <color name="colorBackgroundBar">#F0ECED</color>
-    <color name="colorBackgroundButton">#BFCACF</color>
-    <color name="colorBgProfile">#F5F5F5</color>
+    <color name="colorBackgroundButton">#58C23E</color>
+    <color name="colorBgImage">#C4C4C4</color>
+    <color name="colorBgProfile">#aeafb3</color>
     <color name="choiceColor">#B2DEE0</color>
-    <color name="iconColor">#D181C3</color>
+    <color name="iconColor">#fb7fb1</color>
     <color name="black">#000000</color>
     <color name="bgPassword">#ECD616</color>
     <color name="bgSignInbutton">#25F1EA</color>
@@ -15,4 +16,13 @@
     <color name="foundColor">#A3E2A1</color>
     <color name="lostColor">#F0A2AA</color>
     <color name="photoBgColor">#E8CDF0</color>
+    <color name="profile_edit_text">#F8F8F8</color>
+    <color name="white">#FFFFFF</color>
+    <color name="borderColor">#B4B4B4</color>
+    <color name="upBgColor">#80E5E5E5</color>
+    <color name="divideColor">#ECECEC</color>
+    <color name="tabindicatorcolor">#646460</color>
+    <color name="app_name_log_in">#EBF3B517</color>
+    <color name="ddd">#B2FF59</color>
+    <color name="bgRounded">#6870f7</color>
 </resources>

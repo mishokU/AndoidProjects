@@ -7,6 +7,7 @@
     android:id="@+id/foundscrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollY="110dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.0"
@@ -18,49 +19,14 @@
         android:id="@+id/foundmainTape"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical">
 
-        <include
-            android:id="@+id/request_rectangle"
-            layout="@layout/request_rectangle">
-
-        </include>
-
-        <include
-            android:id="@+id/request_rectangle"
-            layout="@layout/request_rectangle">
-
-        </include>
-
-        <include
-            android:id="@+id/request_rectangle"
-            layout="@layout/request_rectangle">
-
-        </include>
-
-        <include
-            android:id="@+id/request_rectangle"
-            layout="@layout/request_rectangle">
-
-        </include>
-
-        <include
-            android:id="@+id/request_rectangle"
-            layout="@layout/request_rectangle">
-
-        </include>
-
-        <include
-            android:id="@+id/request_rectangle"
-            layout="@layout/request_rectangle">
-
-        </include>
-
-        <include
-            android:id="@+id/request_rectangle"
-            layout="@layout/request_rectangle">
-
-        </include>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:id="@+id/tmpView"/>
 
     </LinearLayout>
 

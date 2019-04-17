@@ -6,10 +6,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
     </style>
 
-    <style name="CustomActionBarStyle" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="CustomActionBarStyle" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:background">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
     </style>
 
 </resources>
