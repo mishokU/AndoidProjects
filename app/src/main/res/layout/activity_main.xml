@@ -38,8 +38,7 @@
 
         <include
             android:id="@+id/profile_button"
-            layout="@layout/image_button">
-
+            layout="@layout/profile_button">
         </include>
 
     </android.support.v7.widget.Toolbar>
@@ -53,10 +52,11 @@
         android:inputType="textPersonName"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/app_bar"
-        app:layout_constraintEnd_toStartOf="@+id/sortButton"
+        app:layout_constraintEnd_toEndOf="@+id/sortButton"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/backButton"
-        app:layout_constraintTop_toTopOf="@+id/app_bar" />
+        app:layout_constraintTop_toTopOf="@+id/app_bar"
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <android.support.design.widget.TabLayout
@@ -71,8 +71,9 @@
         app:layout_constraintVertical_bias="0.0"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/tabindicatorcolor"
+        app:tabSelectedTextColor="@color/colorPrimary"
         app:tabMode="fixed"
-        app:tabTextColor="@color/colorAccent" />
+        app:tabTextColor="@color/colorBgProfile" />
 
     <ImageButton
         android:id="@+id/backButton"
@@ -92,10 +93,23 @@
         app:srcCompat="?attr/homeAsUpIndicator" />
 
     <ImageButton
+        android:id="@+id/rubberView"
+        android:layout_width="49dp"
+        android:layout_height="47dp"
+        android:visibility="invisible"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/searchView"
+        app:layout_constraintEnd_toEndOf="@+id/searchView"
+        app:layout_constraintHorizontal_bias="0.157"
+        app:layout_constraintStart_toEndOf="@+id/sortButton"
+        app:layout_constraintTop_toTopOf="@+id/searchView"
+        app:layout_constraintVertical_bias="0.333"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <ImageButton
         android:id="@+id/searchView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginEnd="2dp"
         android:background="@null"
         android:src="@drawable/image3"
         app:layout_constraintBottom_toBottomOf="@+id/app_bar"
