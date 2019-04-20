@@ -1,15 +1,25 @@
 package com.example.polyfinderv2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -27,16 +37,25 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Intent.ACTION_PICK;
+import static com.example.polyfinderv2.ProfileActivity.GALLERY_REQUEST;
+import static java.security.AccessController.getContext;
+
 public class NewRequestActivity extends AppCompatActivity {
 
+    private final int GALERY_REQUEST = 1;
     private Button publish;
     private EditText title;
     private EditText description;
     private Button lost_button;
     private ImageButton backButton;
+    private Bitmap newBitmap = null;
+    private ImageButton itemImage;
     private ScrollView scrollView;
     private boolean switchButton = false;
     private Spinner spinner;
@@ -50,7 +69,7 @@ public class NewRequestActivity extends AppCompatActivity {
         getAllViews();
         changeColorListener();
         setOptionsForSpinner();
-        setSpinner();
+        setAdapterSpinner();
         setClickListener();
     }
 
@@ -62,7 +81,7 @@ public class NewRequestActivity extends AppCompatActivity {
         arrayOfOptions.add("Others");
     }
 
-    private void setSpinner() {
+    private void setAdapterSpinner() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, arrayOfOptions);
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
@@ -72,17 +91,17 @@ public class NewRequestActivity extends AppCompatActivity {
     }
 
     private void changeColorListener() {
-        lost_button.setOnClickListener(new View.OnClickListener(){
+        lost_button.setOnClickListener(new View.OnClickListener() {
 
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-                if(switchButton) {
+                if (switchButton) {
                     lost_button.setBackgroundColor(getColor(R.color.foundColor));
                     lost_button.setText("Found");
                     lost_button.setTextColor(Color.WHITE);
                     switchButton = false;
-                }else{
+                } else {
                     lost_button.setBackgroundColor(getColor(R.color.lostColor));
                     lost_button.setText("Lost");
                     lost_button.setTextColor(Color.WHITE);
@@ -93,7 +112,7 @@ public class NewRequestActivity extends AppCompatActivity {
     }
 
     private void setClickListener() {
-        publish.setOnClickListener(new View.OnClickListener(){
+        publish.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -118,37 +137,98 @@ public class NewRequestActivity extends AppCompatActivity {
 
             }
         });
+        itemImage.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                setPhotoFromPhone();
+            }
+        });
     }
 
-    private void getAllViews(){
+    private void setPhotoFromPhone() {
+        Intent photoPickerIntent = new Intent(ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Bitmap bitmap;
+
+        float epsilonWidth;
+        float epsilonHeight;
+
+        switch (requestCode){
+            case GALLERY_REQUEST:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = data.getData();
+                    try {
+
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+
+                        epsilonWidth = bitmap.getWidth() / (float)itemImage.getWidth();
+                        epsilonHeight = bitmap.getHeight() / (float)itemImage.getHeight();
+
+                        float newWidth = bitmap.getWidth() / epsilonWidth;
+                        float newHeight = bitmap.getHeight() / epsilonHeight;
+
+                        newBitmap = Bitmap.createScaledBitmap(bitmap, (int)newWidth, (int)newHeight, false);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    itemImage.setImageBitmap(newBitmap);
+                }
+        }
+    }
+
+    private void getAllViews() {
         title = findViewById(R.id.title);
         description = findViewById(R.id.description);
         lost_button = findViewById(R.id.lost_button);
         publish = findViewById(R.id.publish_button);
         backButton = findViewById(R.id.backButton);
         scrollView = findViewById(R.id.scrollView);
+        itemImage = findViewById(R.id.photoImageButton);
         spinner = findViewById(R.id.spinner);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        itemImage.getLayoutParams().height = size.x;
+        itemImage.requestLayout();
     }
 
     private void returnToMainActivity() {
-        Intent mainActivity = new Intent(this, MainActivity.class);
-        startActivity(mainActivity);
         finish();
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
     }
 
     private void publishToScrollView() {
-        //Add to data base and publish to main tape
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent();
 
-        intent.putExtra("title", title.getText().toString());
-        intent.putExtra("category", spinner.getSelectedItem().toString());
-        intent.putExtra("description", description.getText().toString());
-        intent.putExtra("fragment", switchButton);
+        intent.putExtra("title",title.getText().toString());
+        intent.putExtra("category",spinner.getSelectedItem().toString());
+        intent.putExtra("description",description.getText().toString());
+        intent.putExtra("fragment",switchButton);
 
-        startActivity(intent);
-        finish();
+        itemImage.invalidate();
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) itemImage.getDrawable();
+        Bitmap bitmap = bitmapDrawable.getBitmap();
 
-        overridePendingTransition(0,0);
+        if(bitmap != null) {
+            ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream);
+            byte[] byteArray = bStream.toByteArray();
+            intent.putExtra("image", byteArray);
+        }
+        setResult(RESULT_OK, intent);
+        returnToMainActivity();
     }
+
 }

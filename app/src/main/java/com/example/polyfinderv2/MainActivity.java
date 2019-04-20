@@ -1,6 +1,7 @@
 package com.example.polyfinderv2;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.design.widget.TabLayout;
@@ -15,8 +16,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements
         LostFragment.LostFragmentListener,
-        FoundFragment.FoundFragmentListener {
+        FoundFragment.FoundFragmentListener{
 
+    private final int SECOND_ACTIVITY_REQUEST_CODE = 1;
     private ImageButton goToProfileButton;
     private ImageButton requestButton;
     private ImageButton searchView;
@@ -44,8 +46,6 @@ public class MainActivity extends AppCompatActivity implements
         setViewPagerAdapter();
 
         setOnClickListeners();
-
-        addElementToScrollView();
     }
 
     private void setAllViews() {
@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements
                 searchText.setText("");
             }
         });
+        //foundFragment.openFullRequest();
     }
 
 
@@ -194,25 +195,13 @@ public class MainActivity extends AppCompatActivity implements
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void addElementToScrollView() {
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            if (!bundle.getBoolean("fragment")) {
-                foundFragment.setArguments(bundle);
-            } else {
-                lostFragment.setArguments(bundle);
-            }
-        }
-    }
-
     private void launch(Class classActivity) {
         Intent activity = new Intent(this, classActivity);
 
-        if(classActivity == ProfileActivity.class){
-            startActivity(activity);
+        if(classActivity == NewRequestActivity.class){
+            startActivityForResult(activity, SECOND_ACTIVITY_REQUEST_CODE);
         } else {
             startActivity(activity);
-            finish();
         }
         overridePendingTransition(0, 0);
     }
@@ -245,8 +234,18 @@ public class MainActivity extends AppCompatActivity implements
         onRollUpping(rollUp, foundScrollDown);
     }
 
-    /*@Override
-    public void onNewActivityGet(String title, String description, Boolean switchButton, ImageButton imageButton){
-
-    }*/
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SECOND_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Bundle bundle = data.getExtras();
+                if (!bundle.getBoolean("fragment")) {
+                    foundFragment.addNewElementToScrollView(bundle);
+                } else {
+                    lostFragment.addNewElementToScrollView(bundle);
+                }
+            }
+        }
+    }
 }
