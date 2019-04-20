@@ -91,7 +91,7 @@
                 android:layout_height="200dp"
                 android:background="@color/colorAccent"
                 android:contentDescription="@string/setimagefromphone"
-                android:src="@android:drawable/ic_menu_camera"
+                android:src="@drawable/icons8_user_40"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

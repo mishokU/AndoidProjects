@@ -9,7 +9,7 @@
     <color name="colorBgProfile">#aeafb3</color>
     <color name="choiceColor">#B2DEE0</color>
     <color name="iconColor">#fb7fb1</color>
-    <color name="black">#000000</color>
+    <color name="black">#4B4B57</color>
     <color name="bgPassword">#ECD616</color>
     <color name="bgSignInbutton">#25F1EA</color>
     <color name="SignInBackground">#E9E5E0</color>
@@ -25,4 +25,6 @@
     <color name="app_name_log_in">#EBF3B517</color>
     <color name="ddd">#B2FF59</color>
     <color name="bgRounded">#6870f7</color>
+    <color name="descriptionColor">#222222</color>
+    <color name="titleColor">#222222</color>
 </resources>

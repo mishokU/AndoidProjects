@@ -22,7 +22,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText name_surname;
     private EditText email;
     private EditText password;
-    private EditText phone;
+    private EditText re_enter_password;
     private List<View> arrayOfEditText = new ArrayList<View>();
 
     @Override
@@ -58,7 +58,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         arrayOfEditText.add(name_surname = findViewById(R.id.name_surname_field));
         arrayOfEditText.add(email = findViewById(R.id.email_field));
         arrayOfEditText.add(password = findViewById(R.id.password_field));
-        arrayOfEditText.add(phone = findViewById(R.id.telephone_field));
+        arrayOfEditText.add(re_enter_password = findViewById(R.id.reenter_password_field));
     }
 
     private void setActions(){

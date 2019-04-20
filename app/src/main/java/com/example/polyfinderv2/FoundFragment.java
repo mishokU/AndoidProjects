@@ -1,7 +1,10 @@
 package com.example.polyfinderv2;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +17,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -24,10 +29,10 @@ public class FoundFragment extends Fragment {
     private ScrollView foundScrollView;
     private LinearLayout foundMainTape;
     private View foundView;
+    private Bitmap bmp;
 
     public interface FoundFragmentListener {
         void onFoundInputSent(Boolean rollUp, int yPos);
-        //void onNewActivityGet()
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -37,9 +42,7 @@ public class FoundFragment extends Fragment {
         foundView = inflater.inflate(R.layout.found_fragment, container, false);
 
         findAllViews();
-        addNewElementToScrollView();
         setOnActions();
-        openFullRequest();
         return foundView;
     }
 
@@ -49,12 +52,13 @@ public class FoundFragment extends Fragment {
 
     }
 
-    private void openFullRequest() {
+    public void openFullRequest() {
+        System.out.println("Click");
         if(foundMainTape.getChildCount() > 1) {
+            System.out.println("Click 2 ");
             for (int i = 1; i < foundMainTape.getChildCount(); i++) {
                 final int index = i;
                 foundMainTape.getChildAt(i).findViewById(R.id.constraintlayout).setOnClickListener(new View.OnClickListener() {
-
                     TextView titleText = foundMainTape.getChildAt(index).findViewById(R.id.title);
                     TextView description = foundMainTape.getChildAt(index).findViewById(R.id.description);
                     TextView whoFind = foundMainTape.getChildAt(index).findViewById(R.id.person_name);
@@ -66,15 +70,14 @@ public class FoundFragment extends Fragment {
                     public void onClick(View v) {
                         launchOpenRequestActivity(titleText.getText().toString(), description.getText().toString(),
                                 whoFind.getText().toString(), data.getText().toString(), category.getText().toString(), imageButton);
+                        System.out.println("Click 4");
                     }
                 });
             }
         }
     }
 
-    private void addNewElementToScrollView() {
-        Bundle bundle = getArguments();
-
+    public void addNewElementToScrollView(Bundle bundle) {
         if(bundle != null) {
 
             View view = getLayoutInflater().inflate(R.layout.request_rectangle, null);
@@ -83,13 +86,32 @@ public class FoundFragment extends Fragment {
             TextView description = view.findViewById(R.id.description);
             TextView dateView = view.findViewById(R.id.dataview);
             TextView categoryView = view.findViewById(R.id.category);
+            ImageView imageView = view.findViewById(R.id.imageView);
+
+            if(bundle.getByteArray("image") != null) {
+                byte[] byteArray = bundle.getByteArray("image");
+
+                bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
+                float epsilonWidth = bmp.getWidth() / (float)100;
+                float epsilonHeight = bmp.getHeight() / (float)100;
+
+                float newWidth = bmp.getWidth() / epsilonWidth;
+                float newHeight = bmp.getHeight() / epsilonHeight;
+
+                Bitmap newBitmap = Bitmap.createScaledBitmap(bmp, (int)newWidth, (int)newHeight, false);
+
+                imageView.setImageBitmap(newBitmap);
+            }
 
             categoryView.setText(bundle.getString("category"));
-
             String titleText = bundle.getString("title");
             String descText = bundle.getString("description");
 
             title.setText(titleText);
+            if(title.getText().length() > title.getLineCount()) {
+                System.out.println("Line count" + title.getLineCount());
+            }
             title.setLines(1);
             title.setEnabled(false);
 
@@ -105,6 +127,7 @@ public class FoundFragment extends Fragment {
             //addViewToTheServer();
 
             foundMainTape.addView(view, 1);
+            openFullRequest();
         }
     }
 
@@ -131,7 +154,14 @@ public class FoundFragment extends Fragment {
         request.putExtra("description", description);
         request.putExtra("who", whoFind);
         request.putExtra("data", data);
-        //request.putExtra("image", image);
+
+        if(bmp != null) {
+            ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, bStream);
+            byte[] byteArray = bStream.toByteArray();
+
+            request.putExtra("image", byteArray);
+        }
         startActivity(request);
     }
 

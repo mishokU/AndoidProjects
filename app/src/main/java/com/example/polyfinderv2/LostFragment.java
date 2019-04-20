@@ -35,9 +35,7 @@ public class LostFragment extends Fragment {
         lostView = inflater.inflate(R.layout.lost_fragment, container, false);
 
         findAllView();
-        addNewElementToScrollView();
         setOnActions();
-        openFullRequest();
 
         return lostView;
     }
@@ -47,8 +45,7 @@ public class LostFragment extends Fragment {
         lostMainTape = lostScrollView.findViewById(R.id.lostmainTape);
     }
 
-    private void addNewElementToScrollView() {
-        Bundle bundle = getArguments();
+    public void addNewElementToScrollView(Bundle bundle) {
         if(bundle != null) {
 
             View view = getLayoutInflater().inflate(R.layout.request_rectangle, null);
@@ -74,6 +71,7 @@ public class LostFragment extends Fragment {
             dateView.setTextColor(Color.LTGRAY);
 
             lostMainTape.addView(view, 1);
+            openFullRequest();
         }
     }
 

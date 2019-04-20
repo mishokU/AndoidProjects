@@ -103,8 +103,8 @@
                 app:layout_constraintVertical_bias="0.5"
                 tools:layout_editor_absoluteX="0dp" />
 
-            <ImageButton
-                android:id="@+id/photoImageButton"
+            <ImageView
+                android:id="@+id/photoImage"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:background="@color/colorAccent"
@@ -115,7 +115,8 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lost_button"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/polylogo" />
 
             <View
                 android:id="@+id/divider3"
@@ -128,14 +129,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lost_button" />
 
-            <EditText
+            <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorBackgroundBar"
                 android:ems="10"
                 android:hint="@string/title"
-                android:inputType="textMultiLine"
+                android:textColor="@color/titleColor"
+                android:text="23432432"
                 android:padding="10dp"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -154,7 +156,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/title" />
 
-            <EditText
+            <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -162,7 +164,8 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="@string/description"
-                android:inputType="textMultiLine"
+                android:text="3323222"
+                android:textColor="@color/descriptionColor"
                 android:padding="10dp"
                 android:scrollbars="vertical"
                 android:textSize="16sp"
@@ -189,6 +192,7 @@
                 android:gravity="start|top"
                 android:background="@color/colorAccent"
                 android:hint="@string/category"
+                android:textColor="@color/bgRounded"
                 android:textSize="20sp"
                 android:padding="10dp"/>
 
