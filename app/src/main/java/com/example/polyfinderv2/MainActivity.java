@@ -1,40 +1,34 @@
 package com.example.polyfinderv2;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.os.Build;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;
-import java.util.ArrayList;
+import android.widget.SearchView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements
-        LostFragment.LostFragmentListener,
-        FoundFragment.FoundFragmentListener{
+
+public class MainActivity extends AppCompatActivity {
 
     private final int SECOND_ACTIVITY_REQUEST_CODE = 1;
-    private ImageButton goToProfileButton;
-    private ImageButton requestButton;
+    private FloatingActionButton requestButton;
     private ImageButton searchView;
     private android.support.v7.widget.Toolbar toolbar;
-    private ImageButton backButton;
-    private EditText searchText;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ImageButton sortView;
     private FoundFragment foundFragment;
     private LostFragment lostFragment;
-    private ImageButton rubberButton;
-    private ArrayList<View> bunchOfViews = new ArrayList<>();
-    private int foundScrollDown = 0;
-    private int lostScrollDown = 0;
-    private int ToolBarPlusTabLayoutHeight;
+    private ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,141 +43,99 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void setAllViews() {
-        toolbar = findViewById(R.id.app_bar);
+        requestButton = findViewById(R.id.fab);
+        tabLayout = findViewById(R.id.tablayout);
+        viewPager = findViewById(R.id.viewpager);
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.profile_image);
         setSupportActionBar(toolbar);
 
-        bunchOfViews.add(searchView = findViewById(R.id.searchView));
-        bunchOfViews.add(backButton = findViewById(R.id.backButton));
-        bunchOfViews.add(searchText = findViewById(R.id.searchText));
-        bunchOfViews.add(sortView = findViewById(R.id.sortButton));
-        bunchOfViews.add(rubberButton = findViewById(R.id.rubberView));
-        goToProfileButton = toolbar.findViewById(R.id.profile_button);
-        requestButton = findViewById(R.id.request_button);
-        tabLayout = findViewById(R.id.tablayout);
-        viewPager = findViewById(R.id.viewPager);
-        //reloadData = findViewById(R.id.loadData);
+    }
 
-        ToolBarPlusTabLayoutHeight = toolbar.getHeight() + tabLayout.getHeight() + 2;
-
+    @Override
+    public void setSupportActionBar(@Nullable Toolbar toolbar) {
+        super.setSupportActionBar(toolbar);
     }
 
     private void setOnClickListeners() {
-        goToProfileButton.setOnClickListener(new View.OnClickListener() {
+        requestButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            launch(NewRequestActivity.class);
+            }
+        });
+
+       toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 launch(ProfileActivity.class);
-            }
-        });
-
-        requestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launch(NewRequestActivity.class);
-            }
-        });
-
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openCustomSearchView();
-            }
-        });
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeCustomSearchView();
-            }
-        });
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                if(position == 0) {
-                    if(foundScrollDown < toolbar.getHeight() + tabLayout.getHeight() + 2){
-                        for (View b : bunchOfViews) {
-                            b.setY(-foundScrollDown);
-                        }
-                        toolbar.setY(-foundScrollDown);
-                        tabLayout.setY(-foundScrollDown + toolbar.getHeight());
-                    } else {
-                        for (View b : bunchOfViews) {
-                            b.setY(-(toolbar.getHeight() + tabLayout.getHeight() + 2));
-                        }
-                        toolbar.setY(-(toolbar.getHeight() + tabLayout.getHeight() + 2));
-                        tabLayout.setY(-(toolbar.getHeight() + tabLayout.getHeight() + 2) + toolbar.getHeight());
-                    }
-                }
-
-                if(positionOffset >= 0.5) {
-                    if(lostScrollDown < toolbar.getHeight() + tabLayout.getHeight() + 2){
-                        for (View b : bunchOfViews) {
-                            b.setY(-lostScrollDown);
-                        }
-                        toolbar.setY(-lostScrollDown);
-                        tabLayout.setY(-lostScrollDown + toolbar.getHeight());
-                    } else {
-                        for (View b : bunchOfViews) {
-                            b.setY(-(toolbar.getHeight() + tabLayout.getHeight() + 2));
-                        }
-                        toolbar.setY(-(toolbar.getHeight() + tabLayout.getHeight() + 2));
-                        tabLayout.setY(-(toolbar.getHeight() + tabLayout.getHeight() + 2) + toolbar.getHeight());
-                    }
-                }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
 
             }
         });
-        rubberButton.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                searchText.setText("");
-            }
-        });
-        //foundFragment.openFullRequest();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate((R.menu.main_menu),menu);
 
-    private void closeCustomSearchView() {
-        toolbar.setVisibility(View.VISIBLE);
-        goToProfileButton.setVisibility(View.VISIBLE);
-        sortView.setVisibility(View.VISIBLE);
-        rubberButton.setVisibility(View.INVISIBLE);
-        searchView.setVisibility(View.VISIBLE);
-        backButton.setVisibility(View.INVISIBLE);
-        searchText.setVisibility(View.INVISIBLE);
+        final MenuItem SearchItem = menu.findItem(R.id.app_bar_search);
+        final android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) SearchItem.getActionView();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            backButton.setBackgroundColor(getColor(R.color.colorPrimary));
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                setItemsVisibility(menu,SearchItem, false);
+            }
+        });
+
+        searchView.setOnCloseListener(new android.support.v7.widget.SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                setItemsVisibility(menu, SearchItem, true);
+                return false;
+            }
+        });
+
+        searchView.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+    private void setItemsVisibility(Menu menu, MenuItem exception, boolean visible) {
+        for (int i=0; i<menu.size(); ++i) {
+            MenuItem item = menu.getItem(i);
+            if (item != exception) item.setVisible(visible);
         }
-        UIUtil.hideKeyboard(this);
     }
 
-    private void openCustomSearchView() {
-        toolbar.setVisibility(View.INVISIBLE);
-        goToProfileButton.setVisibility(View.INVISIBLE);
-        searchView.setVisibility(View.INVISIBLE);
-        rubberButton.setVisibility(View.VISIBLE);
-        backButton.setVisibility(View.VISIBLE);
-        sortView.setVisibility(View.INVISIBLE);
-        backButton.setBackgroundColor(Color.WHITE);
-        searchText.setVisibility(View.VISIBLE);
-        UIUtil.showKeyboard(this, searchText);
-        //searchView.setAnimation();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.app_bar_search:
+                Toast.makeText(this,"Search", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.sort_button:
+                Toast.makeText(this,"Sort", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void setViewPagerAdapter() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         foundFragment = new FoundFragment();
         lostFragment = new LostFragment();
@@ -206,44 +158,18 @@ public class MainActivity extends AppCompatActivity implements
         overridePendingTransition(0, 0);
     }
 
-    public void onRollUpping(Boolean roll,int yPosition) {
-        if (yPosition <= toolbar.getHeight() + tabLayout.getHeight() + 2) {
-            for (View b : bunchOfViews) {
-                b.setY(-yPosition);
-            }
-            toolbar.setY(-yPosition);
-            tabLayout.setY(-yPosition + toolbar.getHeight());
-        } else {
-            for (View b : bunchOfViews) {
-                b.setY(-(toolbar.getHeight() + tabLayout.getHeight() + 2));
-            }
-            toolbar.setY(-(toolbar.getHeight() + tabLayout.getHeight() + 2));
-            tabLayout.setY(-(toolbar.getHeight() + tabLayout.getHeight() + 2) + toolbar.getHeight());
-        }
-    }
-
-    @Override
-    public void onLostInputSent(Boolean rollUp, int yPos) {
-        lostScrollDown = yPos;
-        onRollUpping(rollUp, lostScrollDown);
-    }
-
-    @Override
-    public void onFoundInputSent(Boolean rollUp, int yPos){
-        foundScrollDown = yPos;
-        onRollUpping(rollUp, foundScrollDown);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SECOND_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Bundle bundle = data.getExtras();
-                if (!bundle.getBoolean("fragment")) {
-                    foundFragment.addNewElementToScrollView(bundle);
-                } else {
-                    lostFragment.addNewElementToScrollView(bundle);
+                if (bundle != null) {
+                    if (!bundle.getBoolean("fragment")) {
+                        foundFragment.addNewElementToScrollView(bundle);
+                    } else {
+                        lostFragment.addNewElementToScrollView(bundle);
+                    }
                 }
             }
         }

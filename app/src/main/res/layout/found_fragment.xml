@@ -1,33 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-
-    android:id="@+id/foundscrollView"
-    android:layout_width="match_parent"
+<RelativeLayout
     android:layout_height="match_parent"
-    android:scrollY="110dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.0"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/tablayout"
-    app:layout_constraintVertical_bias="0.0">
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
-        android:id="@+id/foundmainTape"
-        android:layout_width="match_parent"
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedscrollview"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical">
+        android:layout_width="match_parent">
 
-        <View
-            android:id="@+id/tmpView"
+        <LinearLayout
+            android:id="@+id/mainTape"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="110dp" />
+            android:layout_height="wrap_content">
+        </LinearLayout>
 
-    </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-</ScrollView>
+</RelativeLayout>
