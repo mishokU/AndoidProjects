@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name=".LogInActivity">
+            android:name=".StartActivity">
         </activity>
 
         <activity android:name=".SignInActivity"/>
