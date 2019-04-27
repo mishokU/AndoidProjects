@@ -16,6 +16,10 @@ import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,16 +34,47 @@ public class MainActivity extends AppCompatActivity {
     private LostFragment lostFragment;
     private ViewPagerAdapter adapter;
 
+    //FireBase Utils
+    private FirebaseAuth mAuth;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_main);
+
+
+        setFirebaseAuth();
 
         setAllViews();
 
         setViewPagerAdapter();
 
         setOnClickListeners();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        //updateUI(currentUser);
+        if( currentUser == null){
+            sendToStart();
+        }
+    }
+
+    //CHECK IF USER IS AUTH
+    private void sendToStart() {
+        Intent startIntent = new Intent(MainActivity.this, StartActivity.class);
+        startActivity(startIntent);
+        finish();
+    }
+
+
+    private void setFirebaseAuth() {
+        mAuth = FirebaseAuth.getInstance();
     }
 
     private void setAllViews() {

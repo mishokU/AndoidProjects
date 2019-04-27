@@ -6,10 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-public class LogInActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity {
 
     private EditText email;
     private EditText password;
@@ -21,7 +19,7 @@ public class LogInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
-        setContentView(R.layout.log_in_activity);
+        setContentView(R.layout.start_activity);
 
         findAllViews();
         setOnAction();
