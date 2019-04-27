@@ -86,7 +86,7 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.exit_button:
-                launchActivity(LogInActivity.class);
+                launchActivity(StartActivity.class);
                 return true;
             case R.id.home:
                 launchActivity(MainActivity.class);
@@ -161,7 +161,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void launchActivity(Class activity) {
-        if(activity == LogInActivity.class) {
+        if(activity == StartActivity.class) {
             Intent intent = new Intent(this, activity);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
