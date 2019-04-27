@@ -10,18 +10,18 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 public class OpenRequest extends AppCompatActivity {
 
-    private ImageButton backbutton;
     private TextView titleView;
     private TextView descriptionView;
-    private ImageView imageView;
     private TextView who;
     private TextView data;
     private TextView item;
     private TextView category;
     private ImageView imagePhoto;
+    private android.support.v7.widget.Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstance){
@@ -29,19 +29,36 @@ public class OpenRequest extends AppCompatActivity {
         setContentView(R.layout.open_request);
 
         findAllViews();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         setImageHeight();
-        setOnActions();
         getDataFromTape();
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        backToTape();
+    }
+
     private void findAllViews() {
-        backbutton = findViewById(R.id.backButton);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
         titleView = findViewById(R.id.title);
         descriptionView = findViewById(R.id.description);
         who = findViewById(R.id.who);
         data = findViewById(R.id.dataview);
         imagePhoto = findViewById(R.id.photoImage);
-        item = findViewById(R.id.item);
         category = findViewById(R.id.category);
     }
 
@@ -57,7 +74,6 @@ public class OpenRequest extends AppCompatActivity {
     private void getDataFromTape() {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
-            item.setText(bundle.getString("item"));
             category.setText(bundle.getString("category"));
             who.setText(bundle.getString("who"));
             data.setText(bundle.getString("data"));
@@ -67,21 +83,18 @@ public class OpenRequest extends AppCompatActivity {
             descriptionView.setText(bundle.getString("description"));
             descriptionView.setEnabled(false);
 
+            if(bundle.getString("item").equals("Found Item")){
+                getSupportActionBar().setTitle("Found Item");
+            } else {
+                getSupportActionBar().setTitle("Lost Item");
+            }
+
             if(bundle.getByteArray("image") != null) {
                 byte[] byteArray = bundle.getByteArray("image");
                 Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                 imagePhoto.setImageBitmap(bmp);
             }
         }
-    }
-
-    private void setOnActions() {
-        backbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                backToTape();
-            }
-        });
     }
 
     private void backToTape() {
