@@ -262,7 +262,6 @@ public class NewRequestActivity extends AppCompatActivity {
         title = findViewById(R.id.title);
         description = findViewById(R.id.description);
         lost_button = findViewById(R.id.lost_button);
-        backButton = findViewById(R.id.backButton);
         scrollView = findViewById(R.id.scrollView);
         itemImage = findViewById(R.id.photoImage);
         spinner = findViewById(R.id.spinner);

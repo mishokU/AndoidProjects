@@ -24,6 +24,7 @@ public class RectangleRequest extends View {
 
         createView();
         findAllFields();
+        setDateView();
     }
 
     private void createView(){
@@ -58,7 +59,7 @@ public class RectangleRequest extends View {
         this.categoryView.setText(category);
     }
 
-    public void setDateView(String dateText){
+    public void setDateView(){
         Date date = new Date();
         this.dateView.setText(DateFormat.getDateInstance(DateFormat.MEDIUM).format(date));
         this.dateView.setTextColor(Color.LTGRAY);

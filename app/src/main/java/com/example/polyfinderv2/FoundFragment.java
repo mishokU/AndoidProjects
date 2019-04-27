@@ -134,7 +134,11 @@ public class FoundFragment extends Fragment implements Filterable {
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-
+            List<RectangleRequest> list = new ArrayList<RectangleRequest>((List) results.values);
+            foundMainTape.removeAllViews();
+            for(RectangleRequest rectangleRequest: list) {
+                foundMainTape.addView(rectangleRequest.getRectangleRequestView());
+            }
         }
     };
 }

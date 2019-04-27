@@ -82,22 +82,6 @@ public class MainActivity extends AppCompatActivity {
         final MenuItem SearchItem = menu.findItem(R.id.app_bar_search);
         final android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) SearchItem.getActionView();
 
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                setItemsVisibility(menu,SearchItem, false);
-            }
-        });
-
-        searchView.setOnCloseListener(new android.support.v7.widget.SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                setItemsVisibility(menu, SearchItem, true);
-                return false;
-            }
-        });
-
         searchView.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -106,18 +90,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
+                if(viewPager.getCurrentItem() == 1) {
+                    lostFragment.getFilter().filter(s);
+                } else {
+                    foundFragment.getFilter().filter(s);
+                }
                 return false;
             }
         });
 
         return true;
-    }
-
-    private void setItemsVisibility(Menu menu, MenuItem exception, boolean visible) {
-        for (int i=0; i<menu.size(); ++i) {
-            MenuItem item = menu.getItem(i);
-            if (item != exception) item.setVisible(visible);
-        }
     }
 
     @Override

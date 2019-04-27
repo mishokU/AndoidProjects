@@ -52,7 +52,6 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private void findAllViews() {
-        backToLogIn = findViewById(R.id.backButton);
         createAcc = findViewById(R.id.create);
         sign_in = findViewById(R.id.sign_in);
         arrayOfEditText.add(name_surname = findViewById(R.id.name_surname_field));
