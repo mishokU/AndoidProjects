@@ -1,55 +1,49 @@
 package com.example.polyfinderv2;
 
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.Intent.ACTION_PICK;
-import static com.example.polyfinderv2.ProfileActivity.GALLERY_REQUEST;
-import static java.security.AccessController.getContext;
+import static android.content.Intent.ACTION_GET_CONTENT;
 
 public class NewRequestActivity extends AppCompatActivity {
 
-    private final int GALERY_REQUEST = 1;
-    private Button publish;
+    private final int GALLERY_REQUEST = 20;
+    private final int REQUEST_CAMERA = 2;
+    //private Button publish;
     private EditText title;
     private EditText description;
     private Button lost_button;
@@ -59,18 +53,62 @@ public class NewRequestActivity extends AppCompatActivity {
     private ScrollView scrollView;
     private boolean switchButton = false;
     private Spinner spinner;
+    private Point size;
+    private BitmapHelper bitmapHelper;
     private List<String> arrayOfOptions = new ArrayList<>();
+    private Toolbar toolbar;
+    private Picasso picasso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_request_activity);
 
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        getSupportActionBar().setTitle("Create New Request");
+
+        getDisplayMetric();
         getAllViews();
         changeColorListener();
         setOptionsForSpinner();
         setAdapterSpinner();
         setClickListener();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate((R.menu.new_request_menu),menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.publish_button:
+                publishToScrollView();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void getDisplayMetric() {
+        Display display = getWindowManager().getDefaultDisplay();
+        size = new Point();
+        display.getSize(size);
     }
 
     private void setOptionsForSpinner() {
@@ -111,21 +149,13 @@ public class NewRequestActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        returnToMainActivity();
+    }
+
     private void setClickListener() {
-        publish.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                publishToScrollView();
-            }
-        });
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                returnToMainActivity();
-            }
-        });
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -137,6 +167,7 @@ public class NewRequestActivity extends AppCompatActivity {
 
             }
         });
+
         itemImage.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -146,43 +177,84 @@ public class NewRequestActivity extends AppCompatActivity {
         });
     }
 
+    public static Bitmap decodeSampledBitmapFromResource(String path, int reqWidth, int reqHeight) {
+        // Читаем с inJustDecodeBounds=true для определения размеров
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+
+        // Вычисляем inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Читаем с использованием inSampleSize коэффициента
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(path, options);
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Реальные размеры изображения
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Вычисляем наибольший inSampleSize, который будет кратным двум
+            // и оставит полученные размеры больше, чем требуемые
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
     private void setPhotoFromPhone() {
-        Intent photoPickerIntent = new Intent(ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
+        final CharSequence[] items={"Camera","Gallery","Cancel"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(NewRequestActivity.this);
+        builder.setTitle("Add Image");
+
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               if(items[which].equals("Camera")){
+                   Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                   startActivityForResult(intent, REQUEST_CAMERA);
+
+               } else if(items[which].equals("Gallery")) {
+                   Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                   File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                   String string = file.getPath();
+                   Uri uri = Uri.parse(string);
+                   intent.setDataAndType(uri,"image/*");
+                   startActivityForResult(intent, GALLERY_REQUEST);
+               } else if(items[which].equals("Cancel")) {
+                   dialog.dismiss();
+               }
+            }
+        });
+        builder.show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
 
-        Bitmap bitmap;
+            if (requestCode == GALLERY_REQUEST) {
+                Uri selectedImage = data.getData();
+                Picasso.get().load(selectedImage).resize(size.x,size.x).into(itemImage);
+                //System.out.print("Bitmap size" + );
+            } else if(requestCode == REQUEST_CAMERA) {
+                Uri selectedImage = data.getData();
+                Picasso.get().load(selectedImage).resize(size.x,size.x).into(itemImage);
 
-        float epsilonWidth;
-        float epsilonHeight;
-
-        switch (requestCode){
-            case GALLERY_REQUEST:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = data.getData();
-                    try {
-
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-
-                        epsilonWidth = bitmap.getWidth() / (float)itemImage.getWidth();
-                        epsilonHeight = bitmap.getHeight() / (float)itemImage.getHeight();
-
-                        float newWidth = bitmap.getWidth() / epsilonWidth;
-                        float newHeight = bitmap.getHeight() / epsilonHeight;
-
-                        newBitmap = Bitmap.createScaledBitmap(bitmap, (int)newWidth, (int)newHeight, false);
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    itemImage.setImageBitmap(newBitmap);
-                }
+            }
         }
     }
 
@@ -190,15 +262,11 @@ public class NewRequestActivity extends AppCompatActivity {
         title = findViewById(R.id.title);
         description = findViewById(R.id.description);
         lost_button = findViewById(R.id.lost_button);
-        publish = findViewById(R.id.publish_button);
         backButton = findViewById(R.id.backButton);
         scrollView = findViewById(R.id.scrollView);
-        itemImage = findViewById(R.id.photoImageButton);
+        itemImage = findViewById(R.id.photoImage);
         spinner = findViewById(R.id.spinner);
 
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
 
         itemImage.getLayoutParams().height = size.x;
         itemImage.requestLayout();
@@ -217,16 +285,13 @@ public class NewRequestActivity extends AppCompatActivity {
         intent.putExtra("description",description.getText().toString());
         intent.putExtra("fragment",switchButton);
 
-        itemImage.invalidate();
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) itemImage.getDrawable();
-        Bitmap bitmap = bitmapDrawable.getBitmap();
-
-        if(bitmap != null) {
+        if(newBitmap != null) {
             ByteArrayOutputStream bStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream);
+            newBitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream);
             byte[] byteArray = bStream.toByteArray();
             intent.putExtra("image", byteArray);
         }
+
         setResult(RESULT_OK, intent);
         returnToMainActivity();
     }

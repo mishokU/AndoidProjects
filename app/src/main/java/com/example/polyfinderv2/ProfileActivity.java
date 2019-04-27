@@ -7,26 +7,29 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.io.IOException;
 
 import static android.content.Intent.ACTION_PICK;
+import static android.content.Intent.getIntentOld;
 
 public class ProfileActivity extends AppCompatActivity {
 
     static final int GALLERY_REQUEST = 1;
-
-    private ImageButton backButton;
-    private ImageButton logoutButton;
-
+    private  Toolbar toolbar;
     //Data from views
-    private ImageButton setPhoto;
+    private ImageView setPhoto;
     private Button saveInfoButton;
     private EditText name;
     private EditText surname;
@@ -41,32 +44,59 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_activity);
 
-        Toolbar toolbar = findViewById(R.id.app_bar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle("Profile");
 
         findAllViews();
         setActions();
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        launchActivity(MainActivity.class);
+    }
+
     private void findAllViews(){
-        backButton = findViewById(R.id.backButton);
         setPhoto = findViewById(R.id.photoImageButton);
         name = findViewById(R.id.email_field);
         surname = findViewById(R.id.password_field);
         telephone = findViewById(R.id.telephone_field);
-        logoutButton = findViewById(R.id.logout_button);
         saveInfoButton = findViewById(R.id.save_info_button);
     }
 
-    private void setActions(){
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate((R.menu.profile_menu),menu);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.exit_button:
+                launchActivity(LogInActivity.class);
+                return true;
+            case R.id.home:
                 launchActivity(MainActivity.class);
-            }
-        });
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
+    private void setActions(){
         setPhoto.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -79,13 +109,6 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveInformationToServer();
-            }
-        });
-
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchActivity(LogInActivity.class);
             }
         });
     }
@@ -138,7 +161,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void launchActivity(Class activity) {
-        if(activity == LogInActivity.class){
+        if(activity == LogInActivity.class) {
             Intent intent = new Intent(this, activity);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

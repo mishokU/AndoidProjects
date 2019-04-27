@@ -20,14 +20,11 @@ import java.util.Date;
 
 public class LostFragment extends Fragment {
 
-    private LostFragmentListener listener;
     private View lostView;
     private ScrollView lostScrollView;
     private LinearLayout lostMainTape;
+    private BitmapHelper bitmapHelper;
 
-    public interface LostFragmentListener {
-        void onLostInputSent(Boolean rollUp,int yPos);
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -53,9 +50,19 @@ public class LostFragment extends Fragment {
             TextView title = view.findViewById(R.id.title);
             TextView description = view.findViewById(R.id.description);
             TextView dateView = view.findViewById(R.id.dataview);
+            TextView categoryView = view.findViewById(R.id.category);
+            ImageView imageView = view.findViewById(R.id.imageView);
 
             String titleText = bundle.getString("title");
             String descText = bundle.getString("description");
+            categoryView.setText(bundle.getString("category"));
+
+            if(bundle.getByteArray("image") != null) {
+                bitmapHelper = new BitmapHelper();
+                bitmapHelper.createBitmap(bundle.getByteArray("image"));
+                bitmapHelper.createResizedBitmap(100,100);
+                imageView.setImageBitmap(bitmapHelper.getResizedBitmap());
+            }
 
             title.setText(titleText);
             title.setLines(1);
@@ -77,19 +84,6 @@ public class LostFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void setOnActions() {
-        lostScrollView.setOnScrollChangeListener(new View.OnScrollChangeListener(){
-
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-                if(scrollY <= 70) {
-                    listener.onLostInputSent(false, scrollY);
-                }
-                if(scrollY >= 70) {
-                    listener.onLostInputSent(true, scrollY);
-                }
-            }
-        });
 
     }
 
@@ -124,24 +118,8 @@ public class LostFragment extends Fragment {
         request.putExtra("description", description);
         request.putExtra("who", whoFind);
         request.putExtra("data", data);
-        //request.putExtra("image", image);
+        request.putExtra("image", bitmapHelper.getByteArray(bitmapHelper.getOriginalBitmap()));
         startActivity(request);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if(context instanceof LostFragmentListener) {
-            listener = (LostFragmentListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-            + "must implement LostFragmentListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        listener = null;
-    }
 }

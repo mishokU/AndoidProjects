@@ -7,299 +7,231 @@
     android:layout_height="match_parent"
     tools:context=".ProfileActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/CustomActionBarStyle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar">
 
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:srcCompat="?attr/homeAsUpIndicator"
-            android:paddingEnd="10dp"
-            android:paddingStart="0dp"/>
-
-        <include
-            layout="@layout/app_name">
-
-        </include>
-
-    </android.support.v7.widget.Toolbar>
-
-    <ImageButton
-        android:id="@+id/logout_button"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/app_bar"
-        app:layout_constraintEnd_toEndOf="@+id/app_bar"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/app_bar"
-        app:layout_constraintTop_toTopOf="@+id/app_bar"
-        app:layout_constraintVertical_bias="0.51"
-        app:srcCompat="@drawable/exit_button" />
-
+    </include>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:scrollbarSize="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/const2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="0dp">
-
-            <View
-                android:id="@+id/viewWithData"
-                android:layout_width="0dp"
-                android:layout_height="512dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                android:background="@drawable/bg_edit_text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/email_field"
                 android:layout_width="0dp"
-                android:layout_height="42dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="50dp"
-                android:background="@drawable/bg_edit_text"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="32dp"
+                android:background="@null"
                 android:ems="10"
                 android:hint="somebody@gmail.com"
-                android:inputType="textPersonName"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
                 android:selectAllOnFocus="false"
                 android:singleLine="false"
                 android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="@+id/viewWithData"
-                app:layout_constraintHorizontal_bias="0.097"
-                app:layout_constraintStart_toStartOf="@+id/viewWithData"
-                app:layout_constraintTop_toBottomOf="@+id/email" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/photoImage" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/email"
+                app:layout_constraintEnd_toStartOf="@+id/email_field"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/email_field"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@android:drawable/ic_dialog_email" />
+
+            <ImageButton
+                android:id="@+id/photoImageButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/rounded_sign_in_button"
+                android:src="@android:drawable/ic_menu_camera"
+                app:layout_constraintBottom_toTopOf="@+id/email_field"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.977"
+                app:layout_constraintStart_toStartOf="@+id/photoImage"
+                app:layout_constraintTop_toTopOf="@+id/photoImage"
+                app:layout_constraintVertical_bias="0.921"
+                tools:srcCompat="@android:drawable/ic_menu_camera" />
 
             <EditText
                 android:id="@+id/name_surname_field"
                 android:layout_width="0dp"
-                android:layout_height="42dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="50dp"
-                android:background="@drawable/bg_edit_text"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="30dp"
+                android:background="@null"
                 android:ems="10"
                 android:hint="John Smith"
                 android:inputType="textPersonName"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
                 android:selectAllOnFocus="false"
                 android:singleLine="false"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/password_text"
-                app:layout_constraintEnd_toEndOf="@+id/viewWithData"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/viewWithData"
-                app:layout_constraintTop_toBottomOf="@+id/name_suraname_text" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/email" />
 
             <TextView
                 android:id="@+id/email"
                 android:layout_width="wrap_content"
-                android:layout_height="42dp"
-                android:layout_marginStart="16dp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
+                android:layout_height="wrap_content"
                 android:text="@string/email"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="@+id/viewWithData"
-                app:layout_constraintEnd_toEndOf="@+id/viewWithData"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/email_field"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/viewWithData"
-                app:layout_constraintTop_toTopOf="@+id/viewWithData"
-                app:layout_constraintVertical_bias="0.172" />
+                app:layout_constraintStart_toStartOf="@+id/email_field"
+                app:layout_constraintTop_toBottomOf="@+id/email_field" />
 
             <TextView
                 android:id="@+id/password_text"
                 android:layout_width="wrap_content"
-                android:layout_height="42dp"
-                android:layout_marginStart="16dp"
+                android:layout_height="wrap_content"
                 android:text="Change password"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="@+id/viewWithData"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/password_field"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/viewWithData"
-                app:layout_constraintTop_toBottomOf="@+id/name_surname_field" />
+                app:layout_constraintStart_toStartOf="@+id/password_field"
+                app:layout_constraintTop_toBottomOf="@+id/password_field" />
 
             <TextView
                 android:id="@+id/name_suraname_text"
                 android:layout_width="wrap_content"
-                android:layout_height="42dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="wrap_content"
                 android:text="@string/name_surname"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="@+id/viewWithData"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/name_surname_field"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/viewWithData"
-                app:layout_constraintTop_toBottomOf="@+id/email_field" />
+                app:layout_constraintStart_toStartOf="@+id/name_surname_field"
+                app:layout_constraintTop_toBottomOf="@+id/name_surname_field" />
 
             <EditText
                 android:id="@+id/password_field"
-                android:layout_width="0dp"
+                android:layout_width="331dp"
                 android:layout_height="42dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="50dp"
-                android:background="@drawable/bg_edit_text"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="30dp"
+                android:background="@null"
                 android:ems="10"
                 android:hint="@string/your_current_password"
                 android:inputType="textPassword"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
                 android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="@+id/viewWithData"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/viewWithData"
-                app:layout_constraintTop_toBottomOf="@+id/password_text" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/telephone_text" />
 
             <EditText
                 android:id="@+id/telephone_field"
                 android:layout_width="0dp"
                 android:layout_height="42dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="50dp"
-                android:background="@drawable/bg_edit_text"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="30dp"
+                android:background="@null"
                 android:ems="10"
                 android:hint="@string/telephone_field"
                 android:inputType="phone"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="@+id/viewWithData"
-                app:layout_constraintEnd_toEndOf="@+id/viewWithData"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/viewWithData"
-                app:layout_constraintTop_toBottomOf="@+id/telephone_text"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name_suraname_text" />
 
             <TextView
                 android:id="@+id/telephone_text"
                 android:layout_width="wrap_content"
-                android:layout_height="42dp"
-                android:layout_marginStart="16dp"
+                android:layout_height="wrap_content"
                 android:text="@string/telephone"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="@+id/viewWithData"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/telephone_field"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/viewWithData"
-                app:layout_constraintTop_toBottomOf="@+id/password_field" />
+                app:layout_constraintStart_toStartOf="@+id/telephone_field"
+                app:layout_constraintTop_toBottomOf="@+id/telephone_field" />
 
             <ImageView
                 android:id="@+id/image_edit_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                app:layout_constraintBottom_toBottomOf="@+id/password_field"
-                app:layout_constraintEnd_toEndOf="@+id/viewWithData"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/password_field"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/password_text"
+                app:layout_constraintEnd_toStartOf="@+id/password_field"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/password_field"
-                app:srcCompat="@android:drawable/ic_menu_view" />
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@android:drawable/ic_lock_lock" />
 
             <ImageView
                 android:id="@+id/image_edit_surname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/name_surname_field"
-                app:layout_constraintEnd_toEndOf="@+id/viewWithData"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/name_surname_field"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/name_suraname_text"
+                app:layout_constraintEnd_toStartOf="@+id/name_surname_field"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/name_surname_field"
-                app:srcCompat="@android:drawable/ic_menu_edit" />
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@android:drawable/ic_menu_my_calendar" />
 
             <ImageView
                 android:id="@+id/image_edit_telephone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/telephone_field"
-                app:layout_constraintEnd_toEndOf="@+id/viewWithData"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/telephone_field"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/telephone_text"
+                app:layout_constraintEnd_toStartOf="@+id/telephone_field"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/telephone_field"
-                app:srcCompat="@android:drawable/ic_menu_edit" />
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@android:drawable/ic_menu_call" />
 
             <ImageView
-                android:id="@+id/image_edit_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/email_field"
-                app:layout_constraintEnd_toEndOf="@+id/viewWithData"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/email_field"
-                app:layout_constraintTop_toTopOf="@+id/email_field"
-                app:srcCompat="@android:drawable/ic_menu_edit" />
-
-            <ImageButton
-                android:id="@+id/photoImageButton"
-                android:layout_width="125dp"
-                android:layout_height="125dp"
-                android:background="@drawable/profile_image_button"
+                android:id="@+id/photoImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:contentDescription="@string/setimagefromphone"
                 android:src="@android:drawable/ic_menu_camera"
-                app:layout_constraintEnd_toEndOf="@+id/viewWithData"
-                app:layout_constraintHorizontal_bias="0.502"
-                app:layout_constraintStart_toStartOf="@+id/viewWithData"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/polylogo">
 
-            </ImageButton>
-
-            <View
-                android:id="@+id/stroke_view"
-                android:layout_width="135dp"
-                android:layout_height="135dp"
-                android:background="@drawable/stroke_image"
-                app:layout_constraintBottom_toBottomOf="@+id/photoImageButton"
-                app:layout_constraintEnd_toEndOf="@+id/photoImageButton"
-                app:layout_constraintStart_toStartOf="@+id/photoImageButton"
-                app:layout_constraintTop_toTopOf="@+id/photoImageButton"
-                app:layout_constraintVertical_bias="0.45" />
+            </ImageView>
 
             <Button
                 android:id="@+id/save_info_button"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="24dp"
                 android:background="@drawable/rounded_button"
                 android:text="@string/save_info_button"
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="@+id/viewWithData"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/telephone_field" />
-
-            <View
-                android:id="@+id/view3"
-                android:layout_width="wrap_content"
-                android:layout_height="80dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/viewWithData" />
+                app:layout_constraintTop_toBottomOf="@+id/password_text"
+                app:layout_constraintVertical_bias="1.0" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

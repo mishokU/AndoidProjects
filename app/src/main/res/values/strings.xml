@@ -36,4 +36,5 @@
     <string name="your_current_password">your current password</string>
     <string name="name_surname">Name Surname</string>
     <string name="somebody_gmail_com">Somebody@gmail.com</string>
+    <string name="sort_button">sort_button</string>
 </resources>
