@@ -38,6 +38,8 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstance);
         setContentView(R.layout.sign_in_activity);
 
+        mAuth = FirebaseAuth.getInstance();
+
         findAllViews();
         setOnAction();
         setFocusListener();
