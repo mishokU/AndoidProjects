@@ -42,8 +42,8 @@ public class ProfileActivity extends AppCompatActivity {
     private Button saveInfoButton;
     private EditText email;//МИША БЛО ПОЧЕМУ ЭТО ПОЛЕ БЫЛО НАЗВАНО name просто штоо
     private EditText name;
-    private EditText direction;
     private EditText telephone;
+    private EditText password;
     private EditText group;
     private EditText vkLink;
 
@@ -104,8 +104,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void findAllViews(){
         setPhoto = findViewById(R.id.photoImageButton);
-        email= findViewById(R.id.email_field);
-        name = findViewById(R.id.password_field);
+        email = findViewById(R.id.email_field);
+        name = findViewById(R.id.name_surname_field);
+        password = findViewById(R.id.password_field);
         telephone = findViewById(R.id.telephone_field);
         saveInfoButton = findViewById(R.id.save_info_button);
     }
