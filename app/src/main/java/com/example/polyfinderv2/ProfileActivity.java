@@ -76,10 +76,12 @@ public class ProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 String txt_name = dataSnapshot.child("username").getValue().toString();
+                String txt_email = dataSnapshot.child("email").getValue().toString();
                 //String image = dataSnapshot.child("image").getValue().toString();
                 //String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
 
                 name.setText(txt_name);
+                email.setText(txt_email);
             }
 
             @Override

@@ -35,7 +35,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private EditText re_enter_password;
-    private List<View> arrayOfEditText = new ArrayList<View>();
+    private List<View> arrayOfEditText = new ArrayList<>();
 
     //FireBase authentication
     private FirebaseAuth mAuth;
@@ -78,7 +78,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
 
-    private void register(String email, final String login, String password){
+    private void register(final String email, final String login, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -92,6 +92,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("username", login);
+                            hashMap.put("email", email);
                             hashMap.put("imageUrl", "default");
 
 
