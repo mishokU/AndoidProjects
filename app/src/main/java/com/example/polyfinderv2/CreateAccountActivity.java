@@ -35,7 +35,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private EditText re_enter_password;
-    private List<View> arrayOfEditText = new ArrayList<View>();
+    private List<View> arrayOfEditText = new ArrayList<>();
 
     //FireBase authentication
     private FirebaseAuth mAuth;
@@ -78,7 +78,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
 
-    private void register(String email, String login, String password){
+    private void register(final String email, final String login, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -88,12 +88,13 @@ public class CreateAccountActivity extends AppCompatActivity {
                             assert firebaseUser != null;
                             String user_id = firebaseUser.getUid();
 
-                            reference = FirebaseDatabase.getInstance().getReference("Users").child(user_id);
+                            reference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
 
                             HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put("id", user_id);
-                            //hashMap.put("username", login);
+                            hashMap.put("username", login);
+                            hashMap.put("email", email);
                             hashMap.put("imageUrl", "default");
+
 
                             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
