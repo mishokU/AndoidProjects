@@ -27,4 +27,8 @@
     <color name="bgRounded">#6870f7</color>
     <color name="descriptionColor">#222222</color>
     <color name="titleColor">#222222</color>
+
+    <color name="tabactive">#A3E2A1</color>
+    <color name="foundColorTab">#A3E2A1</color>
+    <color name="lostColorTab">#F0A2AA</color>
 </resources>

@@ -17,9 +17,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        android:scrollbarSize="1dp"
-        android:scrollbarStyle="outsideInset"
+        android:scrollbarSize="0.dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -32,43 +30,44 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/lost_button"
+            <ToggleButton
+                android:id="@+id/choice_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:layout_marginTop="20dp"
-                android:text="lost or found"
+                android:textOff="TAP TO CHOICE"
+                android:textColor="@color/white"
+                android:background="@color/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/app_bar" />
+                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
             <ImageButton
                 android:id="@+id/photoImage"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@color/colorAccent"
                 android:contentDescription="@string/setimagefromphone"
-                android:layout_marginTop="20dp"
+                android:scaleType="fitCenter"
+                android:background="@color/white"
+                android:src="@drawable/polylogo"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lost_button"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/choice_button"
+                app:layout_constraintVertical_bias="0.0"
+                tools:src="@drawable/polylogo" />
 
             <EditText
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorBackgroundBar"
                 android:ems="10"
                 android:hint="@string/title"
                 android:inputType="textMultiLine"
                 android:padding="10dp"
                 android:textSize="24sp"
-                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/borderColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -80,15 +79,14 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="@string/description"
                 android:inputType="textMultiLine"
                 android:padding="10dp"
                 android:scrollbars="vertical"
-                android:layout_marginTop="20dp"
                 android:textSize="16sp"
+                android:backgroundTint="@color/borderColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -100,10 +98,10 @@
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
-                android:layout_marginTop="20dp"
                 android:dropDownWidth="wrap_content"
-                android:spinnerMode="dropdown" />
+                android:dropDownSelector="@color/design_default_color_primary_dark"
+                android:spinnerMode="dialog">
+            </Spinner>
 
         </LinearLayout>
     </ScrollView>

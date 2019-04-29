@@ -84,7 +84,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lost_button"
+                app:layout_constraintTop_toBottomOf="@+id/choice_button"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/polylogo" />
 
@@ -93,11 +93,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="@color/choiceColor"
-                app:layout_constraintBottom_toBottomOf="@+id/lost_button"
+                app:layout_constraintBottom_toBottomOf="@+id/choice_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lost_button" />
+                app:layout_constraintTop_toBottomOf="@+id/choice_button" />
 
             <TextView
                 android:id="@+id/title"

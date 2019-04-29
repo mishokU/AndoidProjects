@@ -38,7 +38,8 @@ public class ProfileActivity extends AppCompatActivity {
     static final int GALLERY_REQUEST = 1;
     private  Toolbar toolbar;
     //Data from views
-    private ImageView setPhoto;
+    private ImageButton setPhoto;
+    private ImageView photoImage;
     private Button saveInfoButton;
     private EditText email;//МИША БЛО ПОЧЕМУ ЭТО ПОЛЕ БЫЛО НАЗВАНО name просто штоо
     private EditText name;
@@ -104,6 +105,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void findAllViews(){
         setPhoto = findViewById(R.id.photoImageButton);
+        photoImage = findViewById(R.id.photoImage);
         email = findViewById(R.id.email_field);
         name = findViewById(R.id.name_surname_field);
         password = findViewById(R.id.password_field);

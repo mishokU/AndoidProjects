@@ -79,25 +79,23 @@ public class LostFragment extends Fragment implements Filterable {
     }
 
     private void openFullRequest() {
-        if(lostMainTape.getChildCount() > 1) {
-            for (int i = 0; i < lostMainTape.getChildCount(); i++) {
-                final int index = i;
-                lostMainTape.getChildAt(i).findViewById(R.id.constraintlayout).setOnClickListener(new View.OnClickListener() {
+        for (int i = 0; i < lostMainTape.getChildCount(); i++) {
+            final int index = i;
+            lostMainTape.getChildAt(i).findViewById(R.id.constraintlayout).setOnClickListener(new View.OnClickListener() {
 
-                    TextView titleText = lostMainTape.getChildAt(index).findViewById(R.id.title);
-                    TextView description = lostMainTape.getChildAt(index).findViewById(R.id.description);
-                    TextView whoFind = lostMainTape.getChildAt(index).findViewById(R.id.person_name);
-                    TextView data = lostMainTape.getChildAt(index).findViewById(R.id.dataview);
-                    TextView category = lostMainTape.getChildAt(index).findViewById(R.id.category);
-                    ImageView imageButton = lostMainTape.getChildAt(index).findViewById(R.id.imageView);
+                TextView titleText = lostMainTape.getChildAt(index).findViewById(R.id.title);
+                TextView description = lostMainTape.getChildAt(index).findViewById(R.id.description);
+                TextView whoFind = lostMainTape.getChildAt(index).findViewById(R.id.person_name);
+                TextView data = lostMainTape.getChildAt(index).findViewById(R.id.dataview);
+                TextView category = lostMainTape.getChildAt(index).findViewById(R.id.category);
+                ImageView imageButton = lostMainTape.getChildAt(index).findViewById(R.id.imageView);
 
-                    @Override
-                    public void onClick(View v) {
-                        launchOpenRequestActivity(titleText.getText().toString(), description.getText().toString(),
-                                whoFind.getText().toString(), data.getText().toString(), category.getText().toString(), imageButton);
-                    }
-                });
-            }
+                @Override
+                public void onClick(View v) {
+                    launchOpenRequestActivity(titleText.getText().toString(), description.getText().toString(),
+                            whoFind.getText().toString(), data.getText().toString(), category.getText().toString(), imageButton);
+                }
+            });
         }
     }
 

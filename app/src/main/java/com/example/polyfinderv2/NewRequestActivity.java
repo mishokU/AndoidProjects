@@ -15,7 +15,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,16 +27,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.Intent.ACTION_GET_CONTENT;
 
 public class NewRequestActivity extends AppCompatActivity {
 
@@ -46,8 +43,7 @@ public class NewRequestActivity extends AppCompatActivity {
     //private Button publish;
     private EditText title;
     private EditText description;
-    private Button lost_button;
-    private ImageButton backButton;
+    private ToggleButton toggle_button;
     private Bitmap newBitmap = null;
     private ImageButton itemImage;
     private ScrollView scrollView;
@@ -129,20 +125,20 @@ public class NewRequestActivity extends AppCompatActivity {
     }
 
     private void changeColorListener() {
-        lost_button.setOnClickListener(new View.OnClickListener() {
+        toggle_button.setOnClickListener(new View.OnClickListener() {
 
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 if (switchButton) {
-                    lost_button.setBackgroundColor(getColor(R.color.foundColor));
-                    lost_button.setText("Found");
-                    lost_button.setTextColor(Color.WHITE);
+                    toggle_button.setBackgroundColor(getColor(R.color.foundColor));
+                    toggle_button.setText("Found");
+                    toggle_button.setTextColor(Color.WHITE);
                     switchButton = false;
                 } else {
-                    lost_button.setBackgroundColor(getColor(R.color.lostColor));
-                    lost_button.setText("Lost");
-                    lost_button.setTextColor(Color.WHITE);
+                    toggle_button.setBackgroundColor(getColor(R.color.lostColor));
+                    toggle_button.setText("Lost");
+                    toggle_button.setTextColor(Color.WHITE);
                     switchButton = true;
                 }
             }
@@ -261,7 +257,7 @@ public class NewRequestActivity extends AppCompatActivity {
     private void getAllViews() {
         title = findViewById(R.id.title);
         description = findViewById(R.id.description);
-        lost_button = findViewById(R.id.lost_button);
+        toggle_button = findViewById(R.id.choice_button);
         scrollView = findViewById(R.id.scrollView);
         itemImage = findViewById(R.id.photoImage);
         spinner = findViewById(R.id.spinner);
