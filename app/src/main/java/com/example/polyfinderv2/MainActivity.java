@@ -32,11 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
     private final int SECOND_ACTIVITY_REQUEST_CODE = 1;
     private FloatingActionButton requestButton;
-    private ImageButton searchView;
     private android.support.v7.widget.Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private ImageButton sortView;
     private FoundFragment foundFragment;
     private LostFragment lostFragment;
     private ViewPagerAdapter adapter;

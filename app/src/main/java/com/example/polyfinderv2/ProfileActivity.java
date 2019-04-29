@@ -191,14 +191,10 @@ public class ProfileActivity extends AppCompatActivity {
                         float newHeight = bitmap.getHeight() / epsilonHeight;
 
                         newBitmap = Bitmap.createScaledBitmap(bitmap, (int)newWidth, (int)newHeight, false);
-
-
+                        photoImage.setImageBitmap(newBitmap);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(),newBitmap);
-                    roundedBitmapDrawable.setCircular(true);
-                    setPhoto.setImageDrawable(roundedBitmapDrawable);
                 }
         }
     }
