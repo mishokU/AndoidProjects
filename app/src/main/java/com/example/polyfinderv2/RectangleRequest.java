@@ -78,8 +78,8 @@ public class RectangleRequest extends View {
         return description.getText();
     }
 
-    public TextView getCategoryView(){
-        return categoryView;
+    public CharSequence getCategoryView(){
+        return categoryView.getText();
     }
 
     public ImageView getImageView(){

@@ -1,10 +1,15 @@
 package com.example.polyfinderv2;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +25,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.File;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private FoundFragment foundFragment;
     private LostFragment lostFragment;
     private ViewPagerAdapter adapter;
+
+    //Sort choice
+    private String choice;
 
     //FireBase Utils
     private FirebaseAuth mAuth;
@@ -141,13 +151,47 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.app_bar_search:
-                Toast.makeText(this,"Search", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.sort_button:
-                Toast.makeText(this,"Sort", Toast.LENGTH_SHORT).show();
+                openBuilderMenu();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void openBuilderMenu() {
+        final CharSequence[] items={"Electronics","Clothing","Eat","Documents","Others","All"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.Theme_AppCompat_Light_Dialog_Alert);
+        builder.setTitle("Sort by: ");
+
+        builder.setSingleChoiceItems(items,1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                choice = items[which].toString();
+            }
+        });
+        builder.setPositiveButton("SHOW", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                sortMainTape();
+            }
+        });
+
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    private void sortMainTape() {
+        if(viewPager.getCurrentItem() == 1) {
+            lostFragment.getFilter().filter(choice);
+        } else {
+            foundFragment.getFilter().filter(choice);
         }
     }
 

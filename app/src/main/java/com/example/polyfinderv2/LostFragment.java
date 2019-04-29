@@ -130,7 +130,8 @@ public class LostFragment extends Fragment implements Filterable {
 
                 for(RectangleRequest rectangleRequest: RectangleRequestList){
                     if((rectangleRequest.getTitleText().toString().toLowerCase().contains(filterPattern)) ||
-                            (rectangleRequest.getDescriptionText().toString().toLowerCase().contains(filterPattern))){
+                       (rectangleRequest.getDescriptionText().toString().toLowerCase().contains(filterPattern)) ||
+                       (rectangleRequest.getCategoryView().toString().toLowerCase().contains(filterPattern))){
                         filteredList.add(rectangleRequest);
                     }
                 }

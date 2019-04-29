@@ -115,14 +115,15 @@ public class FoundFragment extends Fragment implements Filterable {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<RectangleRequest> filteredList = new ArrayList<>();
-            if(constraint == null || constraint.length() == 0){
+            if(constraint == null || constraint.length() == 0 || constraint == "All"){
                 filteredList.addAll(RectangleRequestList);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
                 for(RectangleRequest rectangleRequest: RectangleRequestList){
                     if((rectangleRequest.getTitleText().toString().toLowerCase().contains(filterPattern)) ||
-                       (rectangleRequest.getDescriptionText().toString().toLowerCase().contains(filterPattern))){
+                       (rectangleRequest.getDescriptionText().toString().toLowerCase().contains(filterPattern)) ||
+                       (rectangleRequest.getCategoryView().toString().toLowerCase().contains(filterPattern))){
                         filteredList.add(rectangleRequest);
                     }
                 }
