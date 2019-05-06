@@ -1,10 +1,9 @@
 package com.example.polyfinderv2;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
@@ -16,12 +15,15 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
-import java.text.DateFormat;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class LostFragment extends Fragment implements Filterable {
@@ -32,6 +34,8 @@ public class LostFragment extends Fragment implements Filterable {
     private BitmapHelper bitmapHelper;
     private List<RectangleRequest> RectangleRequestList = new ArrayList<>();
 
+    private DatabaseReference requestDatabase;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -41,6 +45,10 @@ public class LostFragment extends Fragment implements Filterable {
         findAllView();
         setOnActions();
 
+        requestDatabase = FirebaseDatabase.getInstance().getReference().child("Requests");
+
+        loadRequests();
+
         return lostView;
     }
 
@@ -49,21 +57,14 @@ public class LostFragment extends Fragment implements Filterable {
         lostMainTape = lostScrollView.findViewById(R.id.mainTape);
     }
 
-    public void addNewElementToScrollView(Bundle bundle) {
-        if(bundle != null) {
+    public void addNewElementToScrollView(Requests request) {
+        if(request != null) {
 
             RectangleRequest rectangleRequest = new RectangleRequest(getContext());
 
-            if(bundle.getByteArray("image") != null) {
-                bitmapHelper = new BitmapHelper();
-                bitmapHelper.createBitmap(bundle.getByteArray("image"));
-                bitmapHelper.createResizedBitmap(100,100);
-                rectangleRequest.setImageView(bitmapHelper.getResizedBitmap());
-            }
-
-            rectangleRequest.setCategoryView(bundle.getString("category"));
-            rectangleRequest.setTitle(bundle.getString("title"));
-            rectangleRequest.setDescription(bundle.getString("description"));
+            rectangleRequest.setCategoryView(request.getCategory());
+            rectangleRequest.setTitle(request.getTitle());
+            rectangleRequest.setDescription(request.getDescription());
 
             //addViewToTheServer();
 
@@ -71,6 +72,45 @@ public class LostFragment extends Fragment implements Filterable {
             RectangleRequestList.add(rectangleRequest);
             openFullRequest();
         }
+    }
+
+    private void loadRequests(){
+        requestDatabase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                //String friend_id = dataSnapshot.getRef().getKey();
+                Requests request = dataSnapshot.getValue(Requests.class);
+                if(request.getType().equals("lost")){
+                    addNewElementToScrollView(request);
+                }
+
+                //friends.add(request);
+                //friends_ids.add(friend_id);
+
+                //friendsDataAdapter.notifyDataSetChanged();
+                //users_list.smoothScrollToPosition(users.size());//промотка вниз списка пользователей
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -88,7 +128,7 @@ public class LostFragment extends Fragment implements Filterable {
                 TextView whoFind = lostMainTape.getChildAt(index).findViewById(R.id.person_name);
                 TextView data = lostMainTape.getChildAt(index).findViewById(R.id.dataview);
                 TextView category = lostMainTape.getChildAt(index).findViewById(R.id.category);
-                ImageView imageButton = lostMainTape.getChildAt(index).findViewById(R.id.imageView);
+                ImageView imageButton = lostMainTape.getChildAt(index).findViewById(R.id.request_img);
 
                 @Override
                 public void onClick(View v) {

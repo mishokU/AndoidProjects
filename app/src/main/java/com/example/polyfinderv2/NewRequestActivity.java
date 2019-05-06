@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,12 +30,20 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NewRequestActivity extends AppCompatActivity {
 
@@ -55,6 +64,10 @@ public class NewRequestActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Picasso picasso;
 
+    private DatabaseReference requestDatabase;
+    private FirebaseAuth auth;
+    private String current_user_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +87,10 @@ public class NewRequestActivity extends AppCompatActivity {
         setOptionsForSpinner();
         setAdapterSpinner();
         setClickListener();
+
+        requestDatabase = FirebaseDatabase.getInstance().getReference();
+        auth = FirebaseAuth.getInstance();
+        current_user_id = auth.getCurrentUser().getUid();
     }
 
     @Override
@@ -273,22 +290,55 @@ public class NewRequestActivity extends AppCompatActivity {
     }
 
     private void publishToScrollView() {
-        Intent intent = new Intent();
+        final Intent intent = new Intent();
 
-        intent.putExtra("title",title.getText().toString());
-        intent.putExtra("category",spinner.getSelectedItem().toString());
-        intent.putExtra("description",description.getText().toString());
-        intent.putExtra("fragment",switchButton);
+        String type = "";
 
-        if(newBitmap != null) {
-            ByteArrayOutputStream bStream = new ByteArrayOutputStream();
-            newBitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream);
-            byte[] byteArray = bStream.toByteArray();
-            intent.putExtra("image", byteArray);
+        if(switchButton){
+            type = "lost";
+        }else{
+            type = "found";
         }
 
-        setResult(RESULT_OK, intent);
-        returnToMainActivity();
+        DatabaseReference user_message_push = requestDatabase.child("requests").push();
+
+
+        String push_id = user_message_push.getKey();
+
+        Map requestMap = new HashMap();
+        requestMap.put("title", title.getText().toString());
+        requestMap.put("category", spinner.getSelectedItem().toString());
+        requestMap.put("description", description.getText().toString());
+        requestMap.put("time", ServerValue.TIMESTAMP);
+        requestMap.put("from", current_user_id);
+        requestMap.put("type", type);
+
+        requestDatabase.child("Requests").child(push_id).setValue(requestMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    //progress.dismiss();
+                    intent.putExtra("title",title.getText().toString());
+                    intent.putExtra("category",spinner.getSelectedItem().toString());
+                    intent.putExtra("description",description.getText().toString());
+                    intent.putExtra("fragment",switchButton);
+
+                    if(newBitmap != null) {
+                        ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+                        newBitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream);
+                        byte[] byteArray = bStream.toByteArray();
+                        intent.putExtra("image", byteArray);
+                    }
+                    //Intent intent = new Intent(NewRequestActivity.this, MainActivity.class);
+                    returnToMainActivity();
+                }
+            }
+        });
+
+
+
+        //setResult(RESULT_OK, intent);
+
     }
 
 }
