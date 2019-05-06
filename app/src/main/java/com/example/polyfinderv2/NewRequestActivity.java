@@ -244,11 +244,11 @@ public class NewRequestActivity extends AppCompatActivity {
 
             if (requestCode == GALLERY_REQUEST) {
                 Uri selectedImage = data.getData();
-                Picasso.get().load(selectedImage).resize(size.x,size.x).into(itemImage);
+                Picasso.with(NewRequestActivity.this).load(selectedImage).resize(size.x,size.x).into(itemImage);
                 //System.out.print("Bitmap size" + );
             } else if(requestCode == REQUEST_CAMERA) {
                 Uri selectedImage = data.getData();
-                Picasso.get().load(selectedImage).resize(size.x,size.x).into(itemImage);
+                Picasso.with(NewRequestActivity.this).load(selectedImage).resize(size.x,size.x).into(itemImage);
 
             }
         }
