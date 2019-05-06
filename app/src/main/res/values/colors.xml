@@ -31,4 +31,5 @@
     <color name="tabactive">#A3E2A1</color>
     <color name="foundColorTab">#A3E2A1</color>
     <color name="lostColorTab">#F0A2AA</color>
+    <color name="requestcolor">#E0BBA2</color>
 </resources>

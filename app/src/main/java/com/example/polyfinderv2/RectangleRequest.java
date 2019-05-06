@@ -36,7 +36,7 @@ public class RectangleRequest extends View {
         description = view.findViewById(R.id.description);
         dateView = view.findViewById(R.id.dataview);
         categoryView = view.findViewById(R.id.category);
-        imageView = view.findViewById(R.id.imageView);
+        imageView = view.findViewById(R.id.request_img);
     }
 
     public View getRectangleRequestView(){

@@ -1,5 +1,6 @@
 package com.example.polyfinderv2;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,7 +20,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,8 +32,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import id.zelory.compressor.Compressor;
 
 import static android.content.Intent.ACTION_PICK;
 import static android.content.Intent.getIntentOld;
@@ -51,6 +67,11 @@ public class ProfileActivity extends AppCompatActivity {
     //firebase utils
     DatabaseReference reference;
     FirebaseUser currentUser;
+    StorageReference storageReference;
+
+    private ProgressDialog image_load_progress;
+
+    private static final int GALLERY_PICK = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,17 +93,20 @@ public class ProfileActivity extends AppCompatActivity {
 
         reference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
 
+        storageReference = FirebaseStorage.getInstance().getReference();
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 String txt_name = dataSnapshot.child("username").getValue().toString();
                 String txt_email = dataSnapshot.child("email").getValue().toString();
-                //String image = dataSnapshot.child("image").getValue().toString();
+                String image = dataSnapshot.child("imageUrl").getValue().toString();
                 //String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
 
                 name.setText(txt_name);
                 email.setText(txt_email);
+                Picasso.with(ProfileActivity.this).load(image).placeholder(R.mipmap.ic_launcher).into(photoImage);
             }
 
             @Override
@@ -162,12 +186,18 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setPhotoFromPhone() {
-        Intent photoPickerIntent = new Intent(ACTION_PICK);
+        /*Intent photoPickerIntent = new Intent(ACTION_PICK);
         photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
+        startActivityForResult(photoPickerIntent, GALLERY_REQUEST);*/
+
+        Intent gallery = new Intent();
+        gallery.setType("image/*");
+        gallery.setAction(Intent.ACTION_GET_CONTENT);
+
+        startActivityForResult(Intent.createChooser(gallery, "SELECT IMAGE"), GALLERY_PICK);
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -196,6 +226,97 @@ public class ProfileActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+        }
+    }*/
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
+            System.out.println("ERROR DOWNLOADING IMAGE");
+
+            Uri imageUri = data.getData();//READY TO CROP THE IMAGE
+
+            CropImage.activity(imageUri)
+                    .setAspectRatio(2,1)
+                    .start(this);
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+
+                image_load_progress = new ProgressDialog(ProfileActivity.this);
+                image_load_progress.setTitle("Загружаем изображение");
+                image_load_progress.setMessage("Подождите, пока мы обновляем вашу профильную фотографию");
+                image_load_progress.setCanceledOnTouchOutside(false);
+                image_load_progress.show();
+
+                Uri resultUri = result.getUri();
+
+                File thumb_file = new File(resultUri.getPath());
+
+                String currentUid = currentUser.getUid();
+
+                Bitmap thumb_bitmap = new Compressor(this)
+                        .setMaxHeight(200)
+                        .setMaxWidth(100)
+                        .compressToBitmap(thumb_file);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                final byte[] thumb_byte = baos.toByteArray();
+
+                final StorageReference filepath = storageReference.child("Profile_Images").child(currentUid + ".jpg");
+                final StorageReference thumb_filepath = storageReference.child("Profile_Images").child("thumbs").child(currentUid + ".jpg");
+                filepath.putFile(resultUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+                        filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+
+                                final String download_link = uri.toString();
+
+                                UploadTask uploadTask = thumb_filepath.putBytes(thumb_byte);
+                                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        thumb_filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                            @Override
+                                            public void onSuccess(Uri uri) {
+                                                String thumb_download_url = uri.toString();
+
+                                                Map updateMap = new HashMap<>();
+                                                updateMap.put("imageUrl", download_link);
+                                                //updateMap.put("thumb_image", thumb_download_url);
+
+
+                                                reference.updateChildren(updateMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if(task.isSuccessful()){
+                                                            image_load_progress.dismiss();
+                                                            Toast.makeText(ProfileActivity.this, "Successfully Uploaded!", Toast.LENGTH_SHORT).show();
+
+                                                        }
+                                                    }
+                                                });
+
+
+                                            }
+                                        });
+                                    }
+                                });
+
+
+
+                            }
+                        });
+                    }
+                });
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                Toast.makeText(ProfileActivity.this, (CharSequence) error, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
