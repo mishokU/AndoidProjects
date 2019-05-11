@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -18,6 +20,7 @@ public class RectangleRequest extends View {
     private ImageView imageView;
     private TextView categoryView;
     private TextView dateView;
+    private String type;
 
     public RectangleRequest(Context context) {
         super(context);
@@ -66,8 +69,12 @@ public class RectangleRequest extends View {
         this.dateView.setEnabled(false);
     }
 
-    public void setImageView(Bitmap bitmap){
-        this.imageView.setImageBitmap(bitmap);
+    public void setImageView(String image, String type){
+        if(type.equals("lost")) {
+            Picasso.with(view.getContext()).load(image).placeholder(R.mipmap.lost).into(imageView);
+        } else {
+            Picasso.with(view.getContext()).load(image).placeholder(R.mipmap.found).into(imageView);
+        }
     }
 
     public CharSequence getTitleText(){

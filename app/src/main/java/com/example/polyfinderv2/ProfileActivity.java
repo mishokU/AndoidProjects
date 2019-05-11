@@ -102,7 +102,6 @@ public class ProfileActivity extends AppCompatActivity {
                 String txt_name = dataSnapshot.child("username").getValue().toString();
                 String txt_email = dataSnapshot.child("email").getValue().toString();
                 String image = dataSnapshot.child("imageUrl").getValue().toString();
-                //String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
 
                 name.setText(txt_name);
                 email.setText(txt_email);
@@ -276,36 +275,37 @@ public class ProfileActivity extends AppCompatActivity {
 
                                 final String download_link = uri.toString();
 
-                                UploadTask uploadTask = thumb_filepath.putBytes(thumb_byte);
+                                Map updateMap = new HashMap<>();
+                                updateMap.put("imageUrl", download_link);
+
+
+                                reference.updateChildren(updateMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            image_load_progress.dismiss();
+                                            Toast.makeText(ProfileActivity.this, "Successfully Uploaded!", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }
+                                });
+
+                                /*UploadTask uploadTask = thumb_filepath.putBytes(thumb_byte);
                                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                         thumb_filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                             @Override
                                             public void onSuccess(Uri uri) {
-                                                String thumb_download_url = uri.toString();
-
-                                                Map updateMap = new HashMap<>();
-                                                updateMap.put("imageUrl", download_link);
-                                                //updateMap.put("thumb_image", thumb_download_url);
+                                                //String thumb_download_url = uri.toString();
 
 
-                                                reference.updateChildren(updateMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if(task.isSuccessful()){
-                                                            image_load_progress.dismiss();
-                                                            Toast.makeText(ProfileActivity.this, "Successfully Uploaded!", Toast.LENGTH_SHORT).show();
-
-                                                        }
-                                                    }
-                                                });
 
 
                                             }
                                         });
                                     }
-                                });
+                                });*/
 
 
 

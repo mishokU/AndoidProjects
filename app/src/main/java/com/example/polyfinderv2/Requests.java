@@ -2,20 +2,22 @@ package com.example.polyfinderv2;
 
 public class Requests {
 
-    String title, category, description, from, type;
-    long time;
+    private String title, category, description, from, type, image, thumb_image;
+    private long time;
 
     public Requests(){
 
     }
 
-    public Requests(String title, String category, String description, String from, String type, long time ){
+    public Requests(String title, String category, String description, String from, String type, long time, String image, String thumb_image ){
         this.title = title;
         this.category = category;
         this.description = description;
         this.from = from;
         this.type = type;
         this.time = time;
+        this.image = image;
+        this.thumb_image = thumb_image;
     }
 
     public void setTitle(String title){
@@ -65,6 +67,22 @@ public class Requests {
 
     public long getTime(){
         return time;
+    }
+
+    public void setImage(String image){
+        this.image = image;
+    }
+
+    public String getImage(){
+        return image;
+    }
+
+    public void setThumb_image(String thumb_image){
+        this.thumb_image = thumb_image;
+    }
+
+    public String getThumb_image(){
+        return thumb_image;
     }
 
 

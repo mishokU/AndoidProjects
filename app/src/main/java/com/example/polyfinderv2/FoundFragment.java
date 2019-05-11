@@ -58,27 +58,25 @@ public class FoundFragment extends Fragment implements Filterable {
         foundScrollView = foundView.findViewById(R.id.nestedscrollview);
     }
 
-    public void openFullRequest() {
+    public void openFullRequest(final String image, final String from) {
         for (int i = 0; i < foundMainTape.getChildCount(); i++) {
             final int index = i;
             foundMainTape.getChildAt(i).findViewById(R.id.constraintlayout).setOnClickListener(new View.OnClickListener() {
                 TextView titleText = foundMainTape.getChildAt(index).findViewById(R.id.title);
                 TextView description = foundMainTape.getChildAt(index).findViewById(R.id.description);
-                TextView whoFind = foundMainTape.getChildAt(index).findViewById(R.id.person_name);
+                //TextView whoFind = foundMainTape.getChildAt(index).findViewById(R.id.person_name);
                 TextView data = foundMainTape.getChildAt(index).findViewById(R.id.dataview);
                 TextView category = foundMainTape.getChildAt(index).findViewById(R.id.category);
-                ImageView imageButton = foundMainTape.getChildAt(index).findViewById(R.id.request_img);
 
                 @Override
                 public void onClick(View v) {
-                    launchOpenRequestActivity(titleText.getText().toString(), description.getText().toString(),
-                            whoFind.getText().toString(), data.getText().toString(), category.getText().toString(), imageButton);
+                    launchOpenRequestActivity(titleText.getText().toString(), description.getText().toString(), data.getText().toString(), category.getText().toString(), image, from);
                 }
             });
         }
     }
 
-    public void addNewElementToScrollView(Requests request) {
+    public void addNewElementToScrollView(Requests request, String type, String from) {
         if(request != null) {
 
             RectangleRequest rectangleRequest = new RectangleRequest(getContext());
@@ -93,26 +91,25 @@ public class FoundFragment extends Fragment implements Filterable {
             rectangleRequest.setCategoryView(request.getCategory());
             rectangleRequest.setTitle(request.getTitle());
             rectangleRequest.setDescription(request.getDescription());
+            rectangleRequest.setImageView(request.getThumb_image(), type);
 
             //addViewToTheServer();
 
             foundMainTape.addView(rectangleRequest.getRectangleRequestView(), 0);
             RectangleRequestList.add(rectangleRequest);
-            openFullRequest();
+            openFullRequest(request.getImage(), from);
         }
     }
 
-    private void launchOpenRequestActivity(String title, String description, String whoFind, String data, String category, ImageView image) {
+    private void launchOpenRequestActivity(String title, String description, String data, String category, String image, String from) {
         Intent request = new Intent(getActivity(), OpenRequest.class);
         request.putExtra("category", category);
         request.putExtra("title", title);
         request.putExtra("item", "Found Item");
         request.putExtra("description", description);
-        request.putExtra("who", whoFind);
+        request.putExtra("from", from);
         request.putExtra("data", data);
-        if(bitmapHelper != null) {
-            request.putExtra("image", bitmapHelper.getByteArray(bitmapHelper.getOriginalBitmap()));
-        }
+        request.putExtra("image", image);
         startActivity(request);
     }
 
@@ -122,9 +119,12 @@ public class FoundFragment extends Fragment implements Filterable {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 //String friend_id = dataSnapshot.getRef().getKey();
                 Requests request = dataSnapshot.getValue(Requests.class);
-                if(request.getType().equals("found")){
-                    addNewElementToScrollView(request);
+                String type = request.getType();
+                String from = request.getFrom();
+                if(type.equals("found")){
+                    addNewElementToScrollView(request, type, from);
                 }
+
 
                 //friends.add(request);
                 //friends_ids.add(friend_id);

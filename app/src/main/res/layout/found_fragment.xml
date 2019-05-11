@@ -7,7 +7,8 @@
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nestedscrollview"
         android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:padding="5dp">
 
         <LinearLayout
             android:id="@+id/mainTape"
