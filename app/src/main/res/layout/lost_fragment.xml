@@ -14,7 +14,9 @@
             android:id="@+id/mainTape"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:divider="@drawable/lin_divider"
+            android:showDividers="middle">
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
