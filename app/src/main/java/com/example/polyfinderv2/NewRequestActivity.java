@@ -1,5 +1,6 @@
 package com.example.polyfinderv2;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,15 +29,21 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -44,6 +51,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import id.zelory.compressor.Compressor;
 
 public class NewRequestActivity extends AppCompatActivity {
 
@@ -65,8 +75,16 @@ public class NewRequestActivity extends AppCompatActivity {
     private Picasso picasso;
 
     private DatabaseReference requestDatabase;
+    private StorageReference storageReference;
     private FirebaseAuth auth;
     private String current_user_id;
+
+    private static final int GALLERY_PICK = 1;
+    private ProgressDialog image_load_progress;
+    private String request_id;
+    private String request_image_url = "default";
+    private String request_thumb_image_url = "default";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +107,7 @@ public class NewRequestActivity extends AppCompatActivity {
         setClickListener();
 
         requestDatabase = FirebaseDatabase.getInstance().getReference();
+        storageReference = FirebaseStorage.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
         current_user_id = auth.getCurrentUser().getUid();
     }
@@ -227,34 +246,14 @@ public class NewRequestActivity extends AppCompatActivity {
     }
 
     private void setPhotoFromPhone() {
-        final CharSequence[] items={"Camera","Gallery","Cancel"};
+        Intent gallery = new Intent();
+        gallery.setType("image/*");
+        gallery.setAction(Intent.ACTION_GET_CONTENT);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(NewRequestActivity.this);
-        builder.setTitle("Add Image");
-
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-               if(items[which].equals("Camera")){
-                   Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                   startActivityForResult(intent, REQUEST_CAMERA);
-
-               } else if(items[which].equals("Gallery")) {
-                   Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                   File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                   String string = file.getPath();
-                   Uri uri = Uri.parse(string);
-                   intent.setDataAndType(uri,"image/*");
-                   startActivityForResult(intent, GALLERY_REQUEST);
-               } else if(items[which].equals("Cancel")) {
-                   dialog.dismiss();
-               }
-            }
-        });
-        builder.show();
+        startActivityForResult(Intent.createChooser(gallery, "SELECT IMAGE"), GALLERY_PICK);
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
@@ -267,6 +266,116 @@ public class NewRequestActivity extends AppCompatActivity {
                 Uri selectedImage = data.getData();
                 Picasso.with(NewRequestActivity.this).load(selectedImage).resize(size.x,size.x).into(itemImage);
 
+            }
+        }
+    }*/
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
+            System.out.println("ERROR DOWNLOADING IMAGE");
+
+            Uri imageUri = data.getData();//READY TO CROP THE IMAGE
+
+            CropImage.activity(imageUri)
+                    .setAspectRatio(1,1)
+                    .start(this);
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+
+                image_load_progress = new ProgressDialog(NewRequestActivity.this);
+                image_load_progress.setTitle("Загружаем изображение");
+                image_load_progress.setMessage("Подождите, пока мы обновляем вашу профильную фотографию");
+                image_load_progress.setCanceledOnTouchOutside(false);
+                image_load_progress.show();
+
+                Uri resultUri = result.getUri();
+
+                File thumb_file = new File(resultUri.getPath());
+
+                //String currentUid = currentUser.getUid();
+
+                Bitmap thumb_bitmap = new Compressor(this)
+                        .setMaxHeight(100)
+                        .setMaxWidth(100)
+                        .compressToBitmap(thumb_file);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                final byte[] thumb_byte = baos.toByteArray();
+
+                //ПОМЕНЯТЬ НА id заявки
+                // String uniqueID = UUID.randomUUID().toString();
+
+                DatabaseReference user_message_push = requestDatabase.child("requests").push();
+
+
+                request_id = user_message_push.getKey();
+
+
+
+                final StorageReference filepath = storageReference.child("Request_Images").child(request_id + ".jpg");
+                final StorageReference thumb_filepath = storageReference.child("Request_Images").child("thumbs").child(request_id + ".jpg");
+                filepath.putFile(resultUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+                        filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+
+
+
+                                final String download_link = uri.toString();
+                                request_image_url = download_link;
+
+
+                                UploadTask uploadTask = thumb_filepath.putBytes(thumb_byte);
+                                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        thumb_filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                            @Override
+                                            public void onSuccess(Uri uri) {
+                                                String thumb_download_url = uri.toString();
+                                                request_thumb_image_url = thumb_download_url;
+
+                                                image_load_progress.dismiss();
+                                                Toast.makeText(NewRequestActivity.this, "Successfully Uploaded!", Toast.LENGTH_SHORT).show();
+
+                                                /*Map updateMap = new HashMap<>();
+                                                updateMap.put("image", download_link);
+                                                updateMap.put("thumb_image", thumb_download_url);
+
+
+                                                requestDatabase.child("Requests").child(request_id).updateChildren(updateMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if(task.isSuccessful()){
+
+
+                                                        }
+                                                    }
+                                                });*/
+
+
+
+
+                                            }
+                                        });
+                                    }
+                                });
+
+
+
+                            }
+                        });
+                    }
+                });
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                Toast.makeText(NewRequestActivity.this, (CharSequence) error, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -300,10 +409,10 @@ public class NewRequestActivity extends AppCompatActivity {
             type = "found";
         }
 
-        DatabaseReference user_message_push = requestDatabase.child("requests").push();
+        //DatabaseReference user_message_push = requestDatabase.child("Requests").push();
 
 
-        String push_id = user_message_push.getKey();
+        //String push_id = user_message_push.getKey();
 
         Map requestMap = new HashMap();
         requestMap.put("title", title.getText().toString());
@@ -312,23 +421,27 @@ public class NewRequestActivity extends AppCompatActivity {
         requestMap.put("time", ServerValue.TIMESTAMP);
         requestMap.put("from", current_user_id);
         requestMap.put("type", type);
+        requestMap.put("image", request_image_url);
+        requestMap.put("thumb_image", request_thumb_image_url);
 
-        requestDatabase.child("Requests").child(push_id).setValue(requestMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+        requestDatabase.child("Requests").child(request_id).setValue(requestMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    //progress.dismiss();
+
                     intent.putExtra("title",title.getText().toString());
                     intent.putExtra("category",spinner.getSelectedItem().toString());
                     intent.putExtra("description",description.getText().toString());
                     intent.putExtra("fragment",switchButton);
+                    intent.putExtra("image", request_image_url);
+                    intent.putExtra("thumb_image", request_thumb_image_url);
 
-                    if(newBitmap != null) {
+                    /*if(newBitmap != null) {
                         ByteArrayOutputStream bStream = new ByteArrayOutputStream();
                         newBitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream);
                         byte[] byteArray = bStream.toByteArray();
                         intent.putExtra("image", byteArray);
-                    }
+                    }*/
                     //Intent intent = new Intent(NewRequestActivity.this, MainActivity.class);
                     returnToMainActivity();
                 }

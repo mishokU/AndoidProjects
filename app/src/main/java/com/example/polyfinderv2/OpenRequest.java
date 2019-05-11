@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
@@ -11,6 +12,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class OpenRequest extends AppCompatActivity {
 
@@ -75,7 +83,20 @@ public class OpenRequest extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             category.setText(bundle.getString("category"));
-            who.setText(bundle.getString("who"));
+            DatabaseReference from = FirebaseDatabase.getInstance().getReference().child("Users").child(bundle.getString("from"));
+            from.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String name = dataSnapshot.child("username").getValue().toString();
+                    who.setText(name);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
             data.setText(bundle.getString("data"));
 
             titleView.setText(bundle.getString("title"));
@@ -85,14 +106,10 @@ public class OpenRequest extends AppCompatActivity {
 
             if(bundle.getString("item").equals("Found Item")){
                 getSupportActionBar().setTitle("Found Item");
+                Picasso.with(OpenRequest.this).load(bundle.getString("image")).placeholder(R.mipmap.found).into(imagePhoto);
             } else {
                 getSupportActionBar().setTitle("Lost Item");
-            }
-
-            if(bundle.getByteArray("image") != null) {
-                byte[] byteArray = bundle.getByteArray("image");
-                Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                imagePhoto.setImageBitmap(bmp);
+                Picasso.with(OpenRequest.this).load(bundle.getString("image")).placeholder(R.mipmap.lost).into(imagePhoto);
             }
         }
     }

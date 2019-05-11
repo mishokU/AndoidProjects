@@ -57,7 +57,7 @@ public class LostFragment extends Fragment implements Filterable {
         lostMainTape = lostScrollView.findViewById(R.id.mainTape);
     }
 
-    public void addNewElementToScrollView(Requests request) {
+    public void addNewElementToScrollView(Requests request, String type, String from) {
         if(request != null) {
 
             RectangleRequest rectangleRequest = new RectangleRequest(getContext());
@@ -65,12 +65,13 @@ public class LostFragment extends Fragment implements Filterable {
             rectangleRequest.setCategoryView(request.getCategory());
             rectangleRequest.setTitle(request.getTitle());
             rectangleRequest.setDescription(request.getDescription());
+            rectangleRequest.setImageView(request.getThumb_image(), type);
 
             //addViewToTheServer();
 
             lostMainTape.addView(rectangleRequest.getRectangleRequestView(), 0);
             RectangleRequestList.add(rectangleRequest);
-            openFullRequest();
+            openFullRequest(request.getImage(), from);
         }
     }
 
@@ -78,17 +79,12 @@ public class LostFragment extends Fragment implements Filterable {
         requestDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                //String friend_id = dataSnapshot.getRef().getKey();
                 Requests request = dataSnapshot.getValue(Requests.class);
-                if(request.getType().equals("lost")){
-                    addNewElementToScrollView(request);
+                String type = request.getType();
+                String from = request.getFrom();
+                if(type.equals("lost")){
+                    addNewElementToScrollView(request, type, from);
                 }
-
-                //friends.add(request);
-                //friends_ids.add(friend_id);
-
-                //friendsDataAdapter.notifyDataSetChanged();
-                //users_list.smoothScrollToPosition(users.size());//промотка вниз списка пользователей
             }
 
             @Override
@@ -118,38 +114,37 @@ public class LostFragment extends Fragment implements Filterable {
 
     }
 
-    private void openFullRequest() {
+    private void openFullRequest(final String image, final String from) {
         for (int i = 0; i < lostMainTape.getChildCount(); i++) {
             final int index = i;
             lostMainTape.getChildAt(i).findViewById(R.id.constraintlayout).setOnClickListener(new View.OnClickListener() {
 
                 TextView titleText = lostMainTape.getChildAt(index).findViewById(R.id.title);
                 TextView description = lostMainTape.getChildAt(index).findViewById(R.id.description);
-                TextView whoFind = lostMainTape.getChildAt(index).findViewById(R.id.person_name);
+                //TextView whoFind = lostMainTape.getChildAt(index).findViewById(R.id.person_name);
                 TextView data = lostMainTape.getChildAt(index).findViewById(R.id.dataview);
                 TextView category = lostMainTape.getChildAt(index).findViewById(R.id.category);
-                ImageView imageButton = lostMainTape.getChildAt(index).findViewById(R.id.request_img);
+                //ImageView imageButton = lostMainTape.getChildAt(index).findViewById(R.id.request_img);
 
                 @Override
                 public void onClick(View v) {
                     launchOpenRequestActivity(titleText.getText().toString(), description.getText().toString(),
-                            whoFind.getText().toString(), data.getText().toString(), category.getText().toString(), imageButton);
+                            data.getText().toString(), category.getText().toString(), image, from);
                 }
             });
         }
     }
 
-    private void launchOpenRequestActivity(String title, String description, String whoFind, String data, String category, ImageView image) {
+    private void launchOpenRequestActivity(String title, String description, String data, String category, String image, String from) {
         Intent request = new Intent(getActivity(), OpenRequest.class);
         request.putExtra("category", category);
         request.putExtra("item", "Lost Item");
         request.putExtra("title", title);
         request.putExtra("description", description);
-        request.putExtra("who", whoFind);
         request.putExtra("data", data);
-        if(bitmapHelper != null) {
-            request.putExtra("image", bitmapHelper.getByteArray(bitmapHelper.getOriginalBitmap()));
-        }
+        request.putExtra("image", image);
+        request.putExtra("from", from);
+
         startActivity(request);
     }
 
