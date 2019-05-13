@@ -158,7 +158,7 @@ public class LostFragment extends Fragment implements Filterable {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<RectangleRequest> filteredList = new ArrayList<>();
-            if(constraint == null || constraint.length() == 0){
+            if(constraint == null || constraint.length() == 0 || constraint == "All"){
                 filteredList.addAll(RectangleRequestList);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();

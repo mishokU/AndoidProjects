@@ -81,13 +81,6 @@ public class FoundFragment extends Fragment implements Filterable {
 
             RectangleRequest rectangleRequest = new RectangleRequest(getContext());
 
-            /*if(bundle.getByteArray("image") != null) {
-                bitmapHelper = new BitmapHelper();
-                bitmapHelper.createBitmap(bundle.getByteArray("image"));
-                bitmapHelper.createResizedBitmap(100,100);
-                rectangleRequest.setImageView(bitmapHelper.getResizedBitmap());
-            }*/
-
             rectangleRequest.setCategoryView(request.getCategory());
             rectangleRequest.setTitle(request.getTitle());
             rectangleRequest.setDescription(request.getDescription());
@@ -117,20 +110,12 @@ public class FoundFragment extends Fragment implements Filterable {
         requestDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                //String friend_id = dataSnapshot.getRef().getKey();
                 Requests request = dataSnapshot.getValue(Requests.class);
                 String type = request.getType();
                 String from = request.getFrom();
                 if(type.equals("found")){
                     addNewElementToScrollView(request, type, from);
                 }
-
-
-                //friends.add(request);
-                //friends_ids.add(friend_id);
-
-                //friendsDataAdapter.notifyDataSetChanged();
-                //users_list.smoothScrollToPosition(users.size());//промотка вниз списка пользователей
             }
 
             @Override

@@ -21,9 +21,10 @@
             android:id="@+id/tablayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabIndicatorColor="@color/tabindicatorcolor"
+            app:tabIndicatorColor="@color/white"
             app:tabIndicatorHeight="2dp"
-            app:tabTextColor="@color/white" />
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/colorBgProfile" />
 
 
 
