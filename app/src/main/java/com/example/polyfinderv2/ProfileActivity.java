@@ -12,6 +12,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -60,9 +62,6 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText email;//МИША БЛО ПОЧЕМУ ЭТО ПОЛЕ БЫЛО НАЗВАНО name просто штоо
     private EditText name;
     private EditText telephone;
-    private EditText password;
-    private EditText group;
-    private EditText vkLink;
 
     //firebase utils
     DatabaseReference reference;
@@ -70,6 +69,8 @@ public class ProfileActivity extends AppCompatActivity {
     StorageReference storageReference;
 
     private ProgressDialog image_load_progress;
+    private ProgressDialog info_progress;
+
 
     private static final int GALLERY_PICK = 1;
 
@@ -131,7 +132,6 @@ public class ProfileActivity extends AppCompatActivity {
         photoImage = findViewById(R.id.photoImage);
         email = findViewById(R.id.email_field);
         name = findViewById(R.id.name_surname_field);
-        password = findViewById(R.id.password_field);
         telephone = findViewById(R.id.telephone_field);
         saveInfoButton = findViewById(R.id.save_info_button);
     }
@@ -180,7 +180,40 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void saveInformationToServer() {
-        //Danila's code
+
+        info_progress = new ProgressDialog(ProfileActivity.this);
+        info_progress.setTitle("Сохраняем изменения...");
+        info_progress.setMessage("Подождите, пока мы добавим все изменения в ваш аккаунт:)");
+        info_progress.show();
+        String email_txt = email.getText().toString();
+        String name_txt = name.getText().toString();
+        String phone_txt = telephone.getText().toString();
+        if(TextUtils.isEmpty(email_txt)||TextUtils.isEmpty(name_txt)||(TextUtils.isEmpty(phone_txt)&&phone_txt.length() < 11))
+        {
+            Toast.makeText(ProfileActivity.this, "all fields are required", Toast.LENGTH_SHORT).show();
+        }
+        else{
+
+            Map changeMap = new HashMap<>();
+            changeMap.put("email", email_txt);
+            changeMap.put("username", name_txt);
+            changeMap.put("phone", phone_txt);
+
+            reference.updateChildren(changeMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isComplete()){
+
+                        info_progress.dismiss();
+
+                    } else{
+                        info_progress.hide();
+                        Toast.makeText(ProfileActivity.this, "An Error Occured", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        }
 
     }
 
