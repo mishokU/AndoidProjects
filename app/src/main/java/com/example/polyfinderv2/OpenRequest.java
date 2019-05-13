@@ -106,10 +106,10 @@ public class OpenRequest extends AppCompatActivity {
 
             if(bundle.getString("item").equals("Found Item")){
                 getSupportActionBar().setTitle("Found Item");
-                //Picasso.with(OpenRequest.this).load(bundle.getString("image")).placeholder(R.mipmap.found).into(imagePhoto);
+                Picasso.with(OpenRequest.this).load(bundle.getString("image")).placeholder(R.mipmap.found).into(imagePhoto);
             } else {
                 getSupportActionBar().setTitle("Lost Item");
-                //Picasso.with(OpenRequest.this).load(bundle.getString("image")).placeholder(R.mipmap.lost).into(imagePhoto);
+                Picasso.with(OpenRequest.this).load(bundle.getString("image")).placeholder(R.mipmap.lost).into(imagePhoto);
             }
         }
     }

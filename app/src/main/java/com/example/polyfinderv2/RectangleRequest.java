@@ -71,9 +71,9 @@ public class RectangleRequest extends View {
 
     public void setImageView(String image, String type){
         if(type.equals("lost")) {
-            //Picasso.with(view.getContext()).load(image).placeholder(R.mipmap.lost).into(imageView);
+            Picasso.with(view.getContext()).load(image).placeholder(R.mipmap.lost).into(imageView);
         } else {
-            //Picasso.with(view.getContext()).load(image).placeholder(R.mipmap.found).into(imageView);
+            Picasso.with(view.getContext()).load(image).placeholder(R.mipmap.found).into(imageView);
         }
     }
 
