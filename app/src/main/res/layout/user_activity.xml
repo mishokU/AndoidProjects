@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ProfileActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar">
+
+    </include>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/photoImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:contentDescription="@string/setimagefromphone"
+            app:srcCompat="@drawable/polylogo">
+
+        </ImageView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white">
+
+        <EditText
+            android:id="@+id/email_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:hint="somebody@gmail.com"
+            android:selectAllOnFocus="false"
+            android:layout_toEndOf="@id/imageView3"
+            android:layout_marginEnd="20dp"
+            android:singleLine="false"
+            android:textSize="24sp"/>
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:srcCompat="@android:drawable/ic_dialog_email" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image_edit_surname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+
+
+        <EditText
+            android:id="@+id/name_surname_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="John Smith"
+            android:inputType="textPersonName"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/image_edit_surname"
+            android:layout_marginEnd="20dp"
+            android:selectAllOnFocus="false"
+            android:singleLine="false"
+            android:textSize="24sp">
+
+        </EditText>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/telephone_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:hint="@string/telephone_field"
+            android:inputType="phone"
+            android:layout_toEndOf="@id/image_edit_telephone"
+            android:layout_marginEnd="20dp"
+            android:textSize="24sp">
+
+        </EditText>
+
+        <ImageView
+            android:id="@+id/image_edit_telephone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:srcCompat="@android:drawable/ic_menu_call" />
+
+    </RelativeLayout>
+
+</LinearLayout>
