@@ -409,11 +409,6 @@ public class NewRequestActivity extends AppCompatActivity {
             type = "found";
         }
 
-        //DatabaseReference user_message_push = requestDatabase.child("Requests").push();
-
-
-        //String push_id = user_message_push.getKey();
-
         Map requestMap = new HashMap();
         requestMap.put("title", title.getText().toString());
         requestMap.put("category", spinner.getSelectedItem().toString());
