@@ -103,6 +103,10 @@ public class ProfileActivity extends AppCompatActivity {
                 String txt_name = dataSnapshot.child("username").getValue().toString();
                 String txt_email = dataSnapshot.child("email").getValue().toString();
                 String image = dataSnapshot.child("imageUrl").getValue().toString();
+                if(dataSnapshot.hasChild("phone")){
+                    String phone = dataSnapshot.child("phone").getValue().toString();
+                    telephone.setText(phone);
+                }
 
                 name.setText(txt_name);
                 email.setText(txt_email);
@@ -229,37 +233,6 @@ public class ProfileActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(gallery, "SELECT IMAGE"), GALLERY_PICK);
     }
 
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Bitmap bitmap;
-        Bitmap newBitmap = null;
-        float epsilonWidth;
-        float epsilonHeight;
-
-        switch (requestCode){
-            case GALLERY_REQUEST:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = data.getData();
-                    try {
-
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-
-                        epsilonWidth = bitmap.getWidth() / (float)setPhoto.getWidth();
-                        epsilonHeight = bitmap.getHeight() / (float)setPhoto.getHeight();
-
-                        float newWidth = bitmap.getWidth() / epsilonWidth;
-                        float newHeight = bitmap.getHeight() / epsilonHeight;
-
-                        newBitmap = Bitmap.createScaledBitmap(bitmap, (int)newWidth, (int)newHeight, false);
-                        photoImage.setImageBitmap(newBitmap);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-        }
-    }*/
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
@@ -322,25 +295,6 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-
-                                /*UploadTask uploadTask = thumb_filepath.putBytes(thumb_byte);
-                                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        thumb_filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                            @Override
-                                            public void onSuccess(Uri uri) {
-                                                //String thumb_download_url = uri.toString();
-
-
-
-
-                                            }
-                                        });
-                                    }
-                                });*/
-
-
 
                             }
                         });
