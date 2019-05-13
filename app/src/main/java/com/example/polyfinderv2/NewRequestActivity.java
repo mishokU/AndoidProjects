@@ -113,6 +113,16 @@ public class NewRequestActivity extends AppCompatActivity {
         current_user_id = auth.getCurrentUser().getUid();
     }
 
+    private void getAllViews() {
+        title = findViewById(R.id.title);
+        description = findViewById(R.id.description);
+        toggle_button = findViewById(R.id.choice_button);
+        scrollView = findViewById(R.id.scrollView);
+        itemImage = findViewById(R.id.photoImage);
+        spinner = findViewById(R.id.spinner);
+
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -210,42 +220,6 @@ public class NewRequestActivity extends AppCompatActivity {
         });
     }
 
-    public static Bitmap decodeSampledBitmapFromResource(String path, int reqWidth, int reqHeight) {
-        // Читаем с inJustDecodeBounds=true для определения размеров
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, options);
-
-        // Вычисляем inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Читаем с использованием inSampleSize коэффициента
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(path, options);
-    }
-
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Реальные размеры изображения
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Вычисляем наибольший inSampleSize, который будет кратным двум
-            // и оставит полученные размеры больше, чем требуемые
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
     private void setPhotoFromPhone() {
         Intent gallery = new Intent();
         gallery.setType("image/*");
@@ -324,9 +298,6 @@ public class NewRequestActivity extends AppCompatActivity {
                                                 image_load_progress.dismiss();
                                                 Toast.makeText(NewRequestActivity.this, "Successfully Uploaded!", Toast.LENGTH_SHORT).show();
 
-
-
-
                                             }
                                         });
                                     }
@@ -345,19 +316,6 @@ public class NewRequestActivity extends AppCompatActivity {
         }
     }
 
-    private void getAllViews() {
-        title = findViewById(R.id.title);
-        description = findViewById(R.id.description);
-        toggle_button = findViewById(R.id.choice_button);
-        scrollView = findViewById(R.id.scrollView);
-        itemImage = findViewById(R.id.photoImage);
-        spinner = findViewById(R.id.spinner);
-
-
-        itemImage.getLayoutParams().height = size.x;
-        itemImage.requestLayout();
-    }
-
     private void returnToMainActivity() {
         finish();
         overridePendingTransition(0, 0);
@@ -373,7 +331,6 @@ public class NewRequestActivity extends AppCompatActivity {
         }else{
             type = "found";
         }
-
 
         String title_txt = title.getText().toString();
         String spinner_txt = spinner.getSelectedItem().toString();
@@ -408,16 +365,36 @@ public class NewRequestActivity extends AppCompatActivity {
 
                         returnToMainActivity();
                     }
+                  
+        Map requestMap = new HashMap();
+        requestMap.put("title", title.getText().toString());
+        requestMap.put("category", spinner.getSelectedItem().toString());
+        requestMap.put("description", description.getText().toString());
+        requestMap.put("time", ServerValue.TIMESTAMP);
+        requestMap.put("from", current_user_id);
+        requestMap.put("type", type);
+        requestMap.put("image", request_image_url);
+        requestMap.put("thumb_image", request_thumb_image_url);
+
+        requestDatabase.child("Requests").child(request_id).setValue(requestMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+
+                    intent.putExtra("title",title.getText().toString());
+                    intent.putExtra("category",spinner.getSelectedItem().toString());
+                    intent.putExtra("description",description.getText().toString());
+                    intent.putExtra("fragment",switchButton);
+                    intent.putExtra("image", request_image_url);
+                    intent.putExtra("thumb_image", request_thumb_image_url);
+
+                    returnToMainActivity();
                 }
             });
 
         }
 
 
-
-
-
-        //setResult(RESULT_OK, intent);
 
     }
 
