@@ -1,5 +1,6 @@
 package com.example.polyfinderv2;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -41,6 +42,8 @@ public class CreateAccountActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference reference;
 
+    private ProgressDialog progress;
+
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
@@ -62,14 +65,14 @@ public class CreateAccountActivity extends AppCompatActivity {
 
 
                 if(TextUtils.isEmpty(txt_login) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
-                    Toast.makeText(CreateAccountActivity.this, "all fields are required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateAccountActivity.this, "Заполните Все Поля!", Toast.LENGTH_SHORT).show();
                 } else if(!txt_password.equals(txt_passwordApproval)){
-                    Toast.makeText(CreateAccountActivity.this, "passwords are not equal", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateAccountActivity.this, "Пароли не совпадают!", Toast.LENGTH_SHORT).show();
                 } else{
-                    //progress.setTitle("Регистрируем Вас.");
-                    //progress.setMessage("Подождите, пока мы создаем Вам аккаунт :)");
-                    //progress.setCanceledOnTouchOutside(false);
-                    //progress.show();
+                    progress.setTitle("Регистрируем Вас.");
+                    progress.setMessage("Подождите, пока мы создаем Вам аккаунт :)");
+                    progress.setCanceledOnTouchOutside(false);
+                    progress.show();
                     register(txt_email, txt_login, txt_password);
                 }
 
@@ -100,7 +103,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        //progress.dismiss();
+                                        progress.dismiss();
                                         Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
                                         startActivity(intent);
                                         finish();
@@ -109,8 +112,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                             });
 
                         } else{
-                            //progress.hide();
-                            Toast.makeText(CreateAccountActivity.this, "You can't register with this email and password.", Toast.LENGTH_SHORT).show();
+                            progress.hide();
+                            Toast.makeText(CreateAccountActivity.this, "Невозможно зарегистрироваться с этим паролем и почтой.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

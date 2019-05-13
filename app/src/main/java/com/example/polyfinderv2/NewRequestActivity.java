@@ -17,6 +17,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -245,15 +246,13 @@ public class NewRequestActivity extends AppCompatActivity {
 
                 image_load_progress = new ProgressDialog(NewRequestActivity.this);
                 image_load_progress.setTitle("Загружаем изображение");
-                image_load_progress.setMessage("Подождите, пока мы обновляем вашу профильную фотографию");
+                image_load_progress.setMessage("Подождите, пока мы загружаем вашу фотографию");
                 image_load_progress.setCanceledOnTouchOutside(false);
                 image_load_progress.show();
 
                 Uri resultUri = result.getUri();
 
                 File thumb_file = new File(resultUri.getPath());
-
-                //String currentUid = currentUser.getUid();
 
                 Bitmap thumb_bitmap = new Compressor(this)
                         .setMaxHeight(100)
@@ -263,9 +262,6 @@ public class NewRequestActivity extends AppCompatActivity {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 final byte[] thumb_byte = baos.toByteArray();
-
-                //ПОМЕНЯТЬ НА id заявки
-                // String uniqueID = UUID.randomUUID().toString();
 
                 DatabaseReference user_message_push = requestDatabase.child("requests").push();
 
@@ -336,6 +332,40 @@ public class NewRequestActivity extends AppCompatActivity {
             type = "found";
         }
 
+        String title_txt = title.getText().toString();
+        String spinner_txt = spinner.getSelectedItem().toString();
+        String description_txt = description.getText().toString();
+
+        if(TextUtils.isEmpty(title_txt)||TextUtils.isEmpty(spinner_txt)||TextUtils.isEmpty(description_txt)) {
+            Toast.makeText(NewRequestActivity.this, "Заполните Все Поля!", Toast.LENGTH_SHORT).show();
+        }
+        else{
+
+            Map requestMap = new HashMap();
+            requestMap.put("title", title_txt);
+            requestMap.put("category", spinner_txt);
+            requestMap.put("description", description_txt);
+            requestMap.put("time", ServerValue.TIMESTAMP);
+            requestMap.put("from", current_user_id);
+            requestMap.put("type", type);
+            requestMap.put("image", request_image_url);
+            requestMap.put("thumb_image", request_thumb_image_url);
+
+            requestDatabase.child("Requests").child(request_id).setValue(requestMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+
+                        intent.putExtra("title",title.getText().toString());
+                        intent.putExtra("category",spinner.getSelectedItem().toString());
+                        intent.putExtra("description",description.getText().toString());
+                        intent.putExtra("fragment",switchButton);
+                        intent.putExtra("image", request_image_url);
+                        intent.putExtra("thumb_image", request_thumb_image_url);
+
+                        returnToMainActivity();
+                    }
+                  
         Map requestMap = new HashMap();
         requestMap.put("title", title.getText().toString());
         requestMap.put("category", spinner.getSelectedItem().toString());
@@ -360,8 +390,11 @@ public class NewRequestActivity extends AppCompatActivity {
 
                     returnToMainActivity();
                 }
-            }
-        });
+            });
+
+        }
+
+
 
     }
 
