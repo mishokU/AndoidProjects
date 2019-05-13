@@ -112,6 +112,16 @@ public class NewRequestActivity extends AppCompatActivity {
         current_user_id = auth.getCurrentUser().getUid();
     }
 
+    private void getAllViews() {
+        title = findViewById(R.id.title);
+        description = findViewById(R.id.description);
+        toggle_button = findViewById(R.id.choice_button);
+        scrollView = findViewById(R.id.scrollView);
+        itemImage = findViewById(R.id.photoImage);
+        spinner = findViewById(R.id.spinner);
+
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -209,42 +219,6 @@ public class NewRequestActivity extends AppCompatActivity {
         });
     }
 
-    public static Bitmap decodeSampledBitmapFromResource(String path, int reqWidth, int reqHeight) {
-        // Читаем с inJustDecodeBounds=true для определения размеров
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, options);
-
-        // Вычисляем inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Читаем с использованием inSampleSize коэффициента
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(path, options);
-    }
-
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Реальные размеры изображения
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Вычисляем наибольший inSampleSize, который будет кратным двум
-            // и оставит полученные размеры больше, чем требуемые
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
     private void setPhotoFromPhone() {
         Intent gallery = new Intent();
         gallery.setType("image/*");
@@ -253,22 +227,6 @@ public class NewRequestActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(gallery, "SELECT IMAGE"), GALLERY_PICK);
     }
 
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
-
-            if (requestCode == GALLERY_REQUEST) {
-                Uri selectedImage = data.getData();
-                Picasso.with(NewRequestActivity.this).load(selectedImage).resize(size.x,size.x).into(itemImage);
-                //System.out.print("Bitmap size" + );
-            } else if(requestCode == REQUEST_CAMERA) {
-                Uri selectedImage = data.getData();
-                Picasso.with(NewRequestActivity.this).load(selectedImage).resize(size.x,size.x).into(itemImage);
-
-            }
-        }
-    }*/
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
@@ -344,24 +302,6 @@ public class NewRequestActivity extends AppCompatActivity {
                                                 image_load_progress.dismiss();
                                                 Toast.makeText(NewRequestActivity.this, "Successfully Uploaded!", Toast.LENGTH_SHORT).show();
 
-                                                /*Map updateMap = new HashMap<>();
-                                                updateMap.put("image", download_link);
-                                                updateMap.put("thumb_image", thumb_download_url);
-
-
-                                                requestDatabase.child("Requests").child(request_id).updateChildren(updateMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if(task.isSuccessful()){
-
-
-                                                        }
-                                                    }
-                                                });*/
-
-
-
-
                                             }
                                         });
                                     }
@@ -378,19 +318,6 @@ public class NewRequestActivity extends AppCompatActivity {
                 Toast.makeText(NewRequestActivity.this, (CharSequence) error, Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    private void getAllViews() {
-        title = findViewById(R.id.title);
-        description = findViewById(R.id.description);
-        toggle_button = findViewById(R.id.choice_button);
-        scrollView = findViewById(R.id.scrollView);
-        itemImage = findViewById(R.id.photoImage);
-        spinner = findViewById(R.id.spinner);
-
-
-        itemImage.getLayoutParams().height = size.x;
-        itemImage.requestLayout();
     }
 
     private void returnToMainActivity() {
@@ -431,21 +358,10 @@ public class NewRequestActivity extends AppCompatActivity {
                     intent.putExtra("image", request_image_url);
                     intent.putExtra("thumb_image", request_thumb_image_url);
 
-                    /*if(newBitmap != null) {
-                        ByteArrayOutputStream bStream = new ByteArrayOutputStream();
-                        newBitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream);
-                        byte[] byteArray = bStream.toByteArray();
-                        intent.putExtra("image", byteArray);
-                    }*/
-                    //Intent intent = new Intent(NewRequestActivity.this, MainActivity.class);
                     returnToMainActivity();
                 }
             }
         });
-
-
-
-        //setResult(RESULT_OK, intent);
 
     }
 

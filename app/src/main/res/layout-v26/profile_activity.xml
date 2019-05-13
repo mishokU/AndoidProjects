@@ -31,16 +31,19 @@
             android:id="@+id/photoImageButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
             android:layout_alignBottom="@id/photoImage"
-            android:background="@drawable/rounded_sign_in_button"/>
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_sign_in_button"
+            android:src="@android:drawable/ic_menu_camera" />
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_gravity="center"
         android:background="@color/white">
 
         <EditText
@@ -67,9 +70,10 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        android:layout_height="wrap_content">
+        android:layout_gravity="center">
 
         <ImageView
             android:id="@+id/image_edit_surname"
@@ -98,9 +102,10 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/white">
 
         <EditText
             android:id="@+id/telephone_field"

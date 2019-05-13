@@ -54,7 +54,7 @@ public class RectangleRequest extends View {
 
     public void setDescription(String description){
         this.description.setText(description);
-        this.description.setLines(2);
+        this.description.setLines(1);
         this.description.setEnabled(false);
     }
 
