@@ -14,13 +14,18 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".StartActivity">
+            android:name=".StartActivity"
+            android:theme="@style/TransparentStatusBar">
         </activity>
+
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/AppThemeTwo" />
 
-        <activity android:name=".SignInActivity"/>
+        <activity
+            android:parentActivityName=".StartActivity"
+            android:theme="@style/TransparentStatusBar"
+            android:name=".SignInActivity"/>
 
         <activity
             android:name=".MainActivity">
@@ -43,7 +48,9 @@
         </activity>
 
         <activity
-            android:name=".CreateAccountActivity">
+            android:name=".CreateAccountActivity"
+            android:theme="@style/TransparentStatusBar"
+            android:parentActivityName=".StartActivity">
         </activity>
 
         <activity android:name=".OpenRequest" />

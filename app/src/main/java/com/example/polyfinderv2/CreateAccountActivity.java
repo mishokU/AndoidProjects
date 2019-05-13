@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,6 +37,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private EditText re_enter_password;
+    private Toolbar toolbar;
     private List<View> arrayOfEditText = new ArrayList<>();
 
     //FireBase authentication
@@ -54,31 +56,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         findAllViews();
         setFocusListener();
         setActions();
-
-        createAcc.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                String txt_login = name_surname.getText().toString();
-                String txt_email = email.getText().toString();
-                String txt_password = password.getText().toString();
-                String txt_passwordApproval = re_enter_password.getText().toString();
-
-
-                if(TextUtils.isEmpty(txt_login) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
-                    Toast.makeText(CreateAccountActivity.this, "Заполните Все Поля!", Toast.LENGTH_SHORT).show();
-                } else if(!txt_password.equals(txt_passwordApproval)){
-                    Toast.makeText(CreateAccountActivity.this, "Пароли не совпадают!", Toast.LENGTH_SHORT).show();
-                } else{
-                    progress = new ProgressDialog(CreateAccountActivity.this);
-                    progress.setTitle("Регистрируем Вас.");
-                    progress.setMessage("Подождите, пока мы создаем Вам аккаунт :)");
-                    progress.setCanceledOnTouchOutside(false);
-                    progress.show();
-                    register(txt_email, txt_login, txt_password);
-                }
-
-            }
-        });
     }
 
 
@@ -98,7 +75,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                             hashMap.put("username", login);
                             hashMap.put("email", email);
                             hashMap.put("imageUrl", "default");
-
 
                             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -139,25 +115,61 @@ public class CreateAccountActivity extends AppCompatActivity {
     private void findAllViews() {
         createAcc = findViewById(R.id.create);
         sign_in = findViewById(R.id.sign_in);
+        toolbar = findViewById(R.id.start_toolbar);
         arrayOfEditText.add(name_surname = findViewById(R.id.name_surname_field));
         arrayOfEditText.add(email = findViewById(R.id.email_field));
         arrayOfEditText.add(password = findViewById(R.id.password_field));
         arrayOfEditText.add(re_enter_password = findViewById(R.id.reenter_password_field));
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Create New Account");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(0,0);
+    }
 
     private void setActions(){
-        createAcc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchActivity(MainActivity.class);
-            }
-        });
+
         sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 launchActivity(SignInActivity.class);
+            }
+        });
+
+        createAcc.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                String txt_login = name_surname.getText().toString();
+                String txt_email = email.getText().toString();
+                String txt_password = password.getText().toString();
+                String txt_passwordApproval = re_enter_password.getText().toString();
+
+
+                if(TextUtils.isEmpty(txt_login) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
+                    Toast.makeText(CreateAccountActivity.this, "Заполните Все Поля!", Toast.LENGTH_SHORT).show();
+                } else if(!txt_password.equals(txt_passwordApproval)){
+                    Toast.makeText(CreateAccountActivity.this, "Пароли не совпадают!", Toast.LENGTH_SHORT).show();
+                } else{
+                    progress = new ProgressDialog(CreateAccountActivity.this);
+                    progress.setTitle("Регистрируем Вас.");
+                    progress.setMessage("Подождите, пока мы создаем Вам аккаунт :)");
+                    progress.setCanceledOnTouchOutside(false);
+                    progress.show();
+                    register(txt_email, txt_login, txt_password);
+                }
+
             }
         });
     }

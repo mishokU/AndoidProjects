@@ -6,30 +6,27 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="@color/upBgColor"
     android:layout_height="match_parent"
     tools:context=".ProfileActivity">
+
+    <include
+        android:id="@+id/start_toolbar"
+        layout="@layout/start_toolbar"/>
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:layout_height="wrap_content">
+        android:scrollbarSize="0.dp"
+        android:layout_height="0dp">
 
         <LinearLayout
             android:id="@+id/const2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/createnewacc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:text="Create New Account"
-                android:textColor="@color/colorBgProfile"
-                android:textSize="30sp" />
 
             <EditText
                 android:id="@+id/email_field"
@@ -43,8 +40,7 @@
                 android:inputType="textEmailAddress"
                 android:lines="1"
                 android:selectAllOnFocus="false"
-                android:singleLine="false"
-                android:textSize="24sp" />
+                android:singleLine="false" />
 
             <EditText
                 android:id="@+id/name_surname_field"
@@ -58,8 +54,7 @@
                 android:inputType="textPersonName"
                 android:lines="1"
                 android:selectAllOnFocus="false"
-                android:singleLine="false"
-                android:textSize="24sp" />
+                android:singleLine="false" />
 
             <EditText
                 android:id="@+id/password_field"
@@ -71,8 +66,7 @@
                 android:ems="10"
                 android:hint="Type Password"
                 android:inputType="textPassword"
-                android:lines="1"
-                android:textSize="24sp" />
+                android:lines="1" />
 
             <EditText
                 android:id="@+id/reenter_password_field"
@@ -84,8 +78,7 @@
                 android:ems="10"
                 android:hint="Re-Enter Password"
                 android:inputType="textPassword"
-                android:lines="1"
-                android:textSize="24sp" />
+                android:lines="1" />
 
             <Button
                 android:id="@+id/create"

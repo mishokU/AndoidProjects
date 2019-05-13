@@ -54,7 +54,6 @@ public class StartActivity extends AppCompatActivity {
     private void launchActivity(Class activity) {
         Intent intent = new Intent(this, activity);
         startActivity(intent);
-        finish();
         overridePendingTransition(0,0);
     }
 }
