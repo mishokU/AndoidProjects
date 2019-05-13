@@ -69,6 +69,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 } else if(!txt_password.equals(txt_passwordApproval)){
                     Toast.makeText(CreateAccountActivity.this, "Пароли не совпадают!", Toast.LENGTH_SHORT).show();
                 } else{
+                    progress = new ProgressDialog(CreateAccountActivity.this);
                     progress.setTitle("Регистрируем Вас.");
                     progress.setMessage("Подождите, пока мы создаем Вам аккаунт :)");
                     progress.setCanceledOnTouchOutside(false);

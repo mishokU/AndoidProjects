@@ -268,8 +268,6 @@ public class NewRequestActivity extends AppCompatActivity {
 
                 request_id = user_message_push.getKey();
 
-
-
                 final StorageReference filepath = storageReference.child("Request_Images").child(request_id + ".jpg");
                 final StorageReference thumb_filepath = storageReference.child("Request_Images").child("thumbs").child(request_id + ".jpg");
                 filepath.putFile(resultUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -279,11 +277,8 @@ public class NewRequestActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri uri) {
 
-
-
                                 final String download_link = uri.toString();
                                 request_image_url = download_link;
-
 
                                 UploadTask uploadTask = thumb_filepath.putBytes(thumb_byte);
                                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -302,8 +297,6 @@ public class NewRequestActivity extends AppCompatActivity {
                                         });
                                     }
                                 });
-
-
 
                             }
                         });
@@ -338,8 +331,7 @@ public class NewRequestActivity extends AppCompatActivity {
 
         if(TextUtils.isEmpty(title_txt)||TextUtils.isEmpty(spinner_txt)||TextUtils.isEmpty(description_txt)) {
             Toast.makeText(NewRequestActivity.this, "Заполните Все Поля!", Toast.LENGTH_SHORT).show();
-        }
-        else{
+        } else {
 
             Map requestMap = new HashMap();
             requestMap.put("title", title_txt);
@@ -365,37 +357,8 @@ public class NewRequestActivity extends AppCompatActivity {
 
                         returnToMainActivity();
                     }
-                  
-        Map requestMap = new HashMap();
-        requestMap.put("title", title.getText().toString());
-        requestMap.put("category", spinner.getSelectedItem().toString());
-        requestMap.put("description", description.getText().toString());
-        requestMap.put("time", ServerValue.TIMESTAMP);
-        requestMap.put("from", current_user_id);
-        requestMap.put("type", type);
-        requestMap.put("image", request_image_url);
-        requestMap.put("thumb_image", request_thumb_image_url);
-
-        requestDatabase.child("Requests").child(request_id).setValue(requestMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-
-                    intent.putExtra("title",title.getText().toString());
-                    intent.putExtra("category",spinner.getSelectedItem().toString());
-                    intent.putExtra("description",description.getText().toString());
-                    intent.putExtra("fragment",switchButton);
-                    intent.putExtra("image", request_image_url);
-                    intent.putExtra("thumb_image", request_thumb_image_url);
-
-                    returnToMainActivity();
                 }
             });
-
         }
-
-
-
     }
-
 }

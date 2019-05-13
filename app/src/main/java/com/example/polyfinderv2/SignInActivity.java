@@ -56,6 +56,7 @@ public class SignInActivity extends AppCompatActivity {
                 if(TextUtils.isEmpty(txt_login)|| TextUtils.isEmpty(txt_password)){
                     Toast.makeText(SignInActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
                 } else{
+                    progress = new ProgressDialog(SignInActivity.this);
                     progress.setTitle("Авторизация...");
                     progress.setMessage("Подождите, пока мы входим в Ваш аккаунт :)");
                     progress.setCanceledOnTouchOutside(false);
